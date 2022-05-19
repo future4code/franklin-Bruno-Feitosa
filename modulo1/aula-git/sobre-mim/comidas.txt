@@ -1,0 +1,10 @@
+1: Pizza
+2: Pastel
+3: Frango à parmegiana
+4: Hambúrguer
+5: Queijos
+6: Empadão
+7: Pão de alho
+8: Coxão
+9: Bolinha de Queijo
+10: Cachorro quente

@@ -1,0 +1,3 @@
+# Aprendizados da semana
+
+Durante essa semana na **Labenu** aprendi a utilizar comandos do terminal, o git e o VSCode. Com o **terminal** resolvi uma atividade incrível de investigação dentro de arquivos utilizando apenas os comandos relacionados a ele. Em relação ao **git** aprendi comandos específicos para utilizá-lo,  trabalhando com branchs e finalmente aprendendo a abrir um PR, que preciso muito para o trabalho. Além dos dois, aprendi um pouco mais sobre o **VSCode**, suas extensões e interface.

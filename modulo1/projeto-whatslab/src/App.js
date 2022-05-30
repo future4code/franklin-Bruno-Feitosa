@@ -1,23 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import { useState } from "react";
+import "./App.css";
+import AreaDeEnvio from "./components/AreaDeEnvio/AreaDeEnvio";
+import ListaDeMensagens from "./components/ListaDeMensagens/ListaDeMensagens";
+import BalaoDeConversa from "./components/BalaoDeConversa/BalaoDeConversa";
 
 function App() {
+  let nome = "Bruno";
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      {/* <BalaoDeConversa nome="eu" conteudo="conteudo" /> */}
+      <ListaDeMensagens
+        tipo="eu"
+        nome="Bruno"
+        mensagem={`Oii, eu sou o ${nome}!`}
+      />
+      <AreaDeEnvio />
     </div>
   );
 }

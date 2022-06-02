@@ -10,6 +10,8 @@ import { SecaoComentario } from "../SecaoComentario/SecaoComentario";
 
 import iconeSalvoPreto from "../../img/save-black-icon.svg";
 import iconeSalvoBranco from "../../img/save-white-icon.svg";
+import iconeCompartilhar from "../../img/share-icon.svg";
+import { SecaoCompartilhar } from "../SecaoCompartilhar/SecaoCompartilhar";
 
 const PostContainer = styled.div`
   border: 1px solid gray;
@@ -21,7 +23,7 @@ const PostHeader = styled.div`
   height: 40px;
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  justify-content: space-between;
 `;
 
 const PostFooter = styled.div`
@@ -41,6 +43,12 @@ const UserPhoto = styled.img`
 
 const PostPhoto = styled.img`
   width: 100%;
+`;
+
+const NameImageDiv = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
 `;
 
 function Post(props) {
@@ -122,15 +130,19 @@ function Post(props) {
     );
   }
 
+  let componenteCompartilhando;
+
   return (
     <PostContainer>
       <PostHeader>
-        <UserPhoto src={props.fotoUsuario} alt={"Imagem do usuario"} />
-        <p>{props.nomeUsuario}</p>
+        <NameImageDiv>
+          <UserPhoto src={props.fotoUsuario} alt={"Imagem do usuario"} />
+          <p>{props.nomeUsuario}</p>
+        </NameImageDiv>
+        <IconeComContador icone={iconeSalvo} onClickIcone={onClickSalvo} />
       </PostHeader>
 
       <PostPhoto src={props.fotoPost} alt={"Imagem do post"} />
-
       <PostFooter>
         <IconeComContador
           icone={iconeCurtida}
@@ -143,9 +155,10 @@ function Post(props) {
           onClickIcone={onClickComentario}
           valorContador={numeroComentarios}
         />
-        <IconeComContador icone={iconeSalvo} onClickIcone={onClickSalvo} />
+        <IconeComContador icone={iconeCompartilhar} />
       </PostFooter>
       {componenteComentario}
+      {componenteCompartilhando}
     </PostContainer>
   );
 }

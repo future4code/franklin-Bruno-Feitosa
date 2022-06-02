@@ -8,5 +8,5 @@ const ShareContainer = styled.div`
 `;
 
 export function SecaoCompartilhar(props) {
-  return <ShareContainer></ShareContainer>;
+  return <ShareContainer>Teste</ShareContainer>;
 }

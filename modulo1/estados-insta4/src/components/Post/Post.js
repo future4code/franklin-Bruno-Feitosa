@@ -11,7 +11,6 @@ import { SecaoComentario } from "../SecaoComentario/SecaoComentario";
 import iconeSalvoPreto from "../../img/save-black-icon.svg";
 import iconeSalvoBranco from "../../img/save-white-icon.svg";
 import iconeCompartilhar from "../../img/share-icon.svg";
-import { SecaoCompartilhar } from "../SecaoCompartilhar/SecaoCompartilhar";
 
 const PostContainer = styled.div`
   border: 1px solid gray;

@@ -10,17 +10,20 @@ const CommentContainer = styled.div`
 const InputComentario = styled.input`
   width: 100%;
   margin-right: 5px;
+  padding: 5px;
 `;
 
 export function SecaoComentario(props) {
   return (
-    <CommentContainer>
-      <InputComentario
-        placeholder={"Comentário"}
-        value={props.inputComentario}
-        onChange={props.handleInput}
-      />
-      <button onClick={props.aoEnviar}>Enviar</button>
-    </CommentContainer>
+    <div>
+      <CommentContainer>
+        <InputComentario
+          placeholder={"Comentário"}
+          value={props.inputComentario}
+          onChange={props.handleInput}
+        />
+        <button onClick={props.aoEnviar}>Enviar</button>
+      </CommentContainer>
+    </div>
   );
 }

@@ -11,6 +11,7 @@ import { SecaoComentario } from "../SecaoComentario/SecaoComentario";
 import iconeSalvoPreto from "../../img/save-black-icon.svg";
 import iconeSalvoBranco from "../../img/save-white-icon.svg";
 import iconeCompartilhar from "../../img/share-icon.svg";
+import { SecaoCompartilhar } from "../SecaoCompartilhar/SecaoCompartilhar";
 
 const PostContainer = styled.div`
   border: 1px solid gray;
@@ -23,6 +24,7 @@ const PostHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-right: 10px;
 `;
 
 const PostFooter = styled.div`
@@ -50,6 +52,15 @@ const NameImageDiv = styled.div`
   padding-left: 10px;
 `;
 
+const CommentListLi = styled.li`
+  display: flex;
+  border-top: 0.5px solid black;
+  font-size: 0.875rem;
+  padding: 10px 0;
+  align-items: center;
+  padding-left: 10px;
+`;
+
 function Post(props) {
   // const [state, setState] = useState({
   //   curtido: false,
@@ -61,9 +72,13 @@ function Post(props) {
   const [numeroCurtidas, setnumeroCurtidas] = useState(0);
   const [curtido, setCurtido] = useState(false);
   const [comentando, setComentando] = useState(false);
+  const [compartilhar, setCompartilhar] = useState(false);
   const [salvo, setSalvo] = useState(false);
   const [numeroComentarios, setNumeroComentarios] = useState(0);
   const [inputComentario, setInputComentario] = useState("");
+  const [listaDeComentarios, setListaDeComentarios] = useState({
+    comentarios: [],
+  });
 
   const onClickCurtida = () => {
     if (!curtido) {
@@ -102,7 +117,37 @@ function Post(props) {
     setComentando(false);
     setNumeroComentarios(numeroComentarios + 1);
     console.log(inputComentario);
+    adicionarComentario();
   };
+
+  const adicionarComentario = () => {
+    const novoComentario = [inputComentario];
+
+    const novaListaComentarios = [
+      ...listaDeComentarios.comentarios,
+      novoComentario,
+    ];
+
+    const novoEstado = { comentarios: novaListaComentarios };
+
+    setListaDeComentarios(novoEstado);
+  };
+
+  let componenteCompartilhar;
+
+  const onClickCompartilhar = () => {
+    setCompartilhar(!compartilhar);
+  };
+
+  const fecharSecaoCompartilhar = () => {
+    setCompartilhar(false);
+  };
+
+  const listandoComentarios = listaDeComentarios.comentarios.map(
+    (comentario, index) => {
+      return <CommentListLi key={index}>{comentario}</CommentListLi>;
+    }
+  );
 
   let iconeCurtida;
 
@@ -129,7 +174,13 @@ function Post(props) {
     );
   }
 
-  let componenteCompartilhando;
+  if (compartilhar) {
+    componenteCompartilhar = (
+      <SecaoCompartilhar
+        fecharSecaoCompartilhar={fecharSecaoCompartilhar}
+      ></SecaoCompartilhar>
+    );
+  }
 
   return (
     <PostContainer>
@@ -154,10 +205,14 @@ function Post(props) {
           onClickIcone={onClickComentario}
           valorContador={numeroComentarios}
         />
-        <IconeComContador icone={iconeCompartilhar} />
+        <IconeComContador
+          icone={iconeCompartilhar}
+          onClickIcone={onClickCompartilhar}
+        />
       </PostFooter>
       {componenteComentario}
-      {componenteCompartilhando}
+      {listandoComentarios}
+      {componenteCompartilhar}
     </PostContainer>
   );
 }

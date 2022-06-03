@@ -72,17 +72,32 @@ function App() {
   //   setFotoPost(inputFotoPost);
   // };
 
+  const checkEmptyInput = () => {
+    if (
+      inputNomeUsuario !== "" &&
+      inputFotoUsuario !== "" &&
+      inputFotoPost !== ""
+    ) {
+      return false;
+    } else return true;
+  };
+
   const adicionaPost = () => {
-    const novoPost = {
-      nomeUsuario: inputNomeUsuario,
-      fotoUsuario: inputFotoUsuario,
-      fotoPost: inputFotoPost,
-    };
+    if (checkEmptyInput()) {
+      console.log("Não podemos cadastra um post sem nenhum conteúdo!");
+    } else {
+      const novoPost = {
+        nomeUsuario: inputNomeUsuario,
+        fotoUsuario: inputFotoUsuario,
+        fotoPost: inputFotoPost,
+      };
 
-    const novaListaDePosts = [novoPost, ...state.posts];
-    const novoEstado = { posts: novaListaDePosts };
+      const novaListaDePosts = [novoPost, ...state.posts];
+      const novoEstado = { posts: novaListaDePosts };
 
-    setState(novoEstado);
+      setState(novoEstado);
+    }
+
     setInputNomeUsuario("");
     setInputFotoUsuario("");
     setInputFotoPost("");

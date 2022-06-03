@@ -113,24 +113,36 @@ function Post(props) {
     setInputComentario(e.target.value);
   };
 
-  const aoEnviarComentario = () => {
-    setComentando(false);
-    setNumeroComentarios(numeroComentarios + 1);
-    console.log(inputComentario);
-    adicionarComentario();
+  const checkEmptyComment = () => {
+    if (inputComentario !== "") {
+      return false;
+    } else return true;
   };
 
   const adicionarComentario = () => {
-    const novoComentario = [inputComentario];
+    if (checkEmptyComment()) {
+      console.log("Insira um comentário!");
+    } else {
+      const novoComentario = [inputComentario];
 
-    const novaListaComentarios = [
-      ...listaDeComentarios.comentarios,
-      novoComentario,
-    ];
+      const novaListaComentarios = [
+        ...listaDeComentarios.comentarios,
+        novoComentario,
+      ];
 
-    const novoEstado = { comentarios: novaListaComentarios };
+      const novoEstado = { comentarios: novaListaComentarios };
 
-    setListaDeComentarios(novoEstado);
+      setListaDeComentarios(novoEstado);
+    }
+  };
+
+  const aoEnviarComentario = () => {
+    setComentando(false);
+    if (!checkEmptyComment()) {
+      setNumeroComentarios(numeroComentarios + 1);
+    }
+    // console.log(inputComentario);
+    adicionarComentario();
   };
 
   let componenteCompartilhar;

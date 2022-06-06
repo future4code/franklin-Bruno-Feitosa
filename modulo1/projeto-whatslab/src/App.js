@@ -1,22 +1,34 @@
-import logo from "./logo.svg";
-import { useState } from "react";
-import "./App.css";
 import AreaDeEnvio from "./components/AreaDeEnvio/AreaDeEnvio";
-import ListaDeMensagens from "./components/ListaDeMensagens/ListaDeMensagens";
-import BalaoDeConversa from "./components/BalaoDeConversa/BalaoDeConversa";
+import styled from "styled-components";
+import whatslabBG from "../src/img/background-whatslab.jpg";
+import Header from "./components/Header/Header";
+
+const Container = styled.div`
+  width: 40vw;
+  min-width: 30vw;
+  margin: 0 auto;
+`;
+
+const ContainerConversas = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 93vh;
+
+  background: url(${whatslabBG});
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+`;
 
 function App() {
-  let nome = "Bruno";
   return (
-    <div className="container">
-      {/* <BalaoDeConversa nome="eu" conteudo="conteudo" /> */}
-      <ListaDeMensagens
-        tipo="eu"
-        nome="Bruno"
-        mensagem={`Oii, eu sou o ${nome}!`}
-      />
-      <AreaDeEnvio />
-    </div>
+    <Container>
+      <Header />
+      <ContainerConversas>
+        <AreaDeEnvio />
+      </ContainerConversas>
+    </Container>
   );
 }
 

@@ -10,6 +10,8 @@ import { SecaoComentario } from "../SecaoComentario/SecaoComentario";
 
 import iconeSalvoPreto from "../../img/save-black-icon.svg";
 import iconeSalvoBranco from "../../img/save-white-icon.svg";
+import iconeCompartilhar from "../../img/share-icon.svg";
+import { SecaoCompartilhar } from "../SecaoCompartilhar/SecaoCompartilhar";
 
 const PostContainer = styled.div`
   border: 1px solid gray;
@@ -21,7 +23,8 @@ const PostHeader = styled.div`
   height: 40px;
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  justify-content: space-between;
+  padding-right: 10px;
 `;
 
 const PostFooter = styled.div`
@@ -43,6 +46,21 @@ const PostPhoto = styled.img`
   width: 100%;
 `;
 
+const NameImageDiv = styled.div`
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+`;
+
+const CommentListLi = styled.li`
+  display: flex;
+  border-top: 0.5px solid black;
+  font-size: 0.875rem;
+  padding: 10px 0;
+  align-items: center;
+  padding-left: 10px;
+`;
+
 function Post(props) {
   // const [state, setState] = useState({
   //   curtido: false,
@@ -54,9 +72,13 @@ function Post(props) {
   const [numeroCurtidas, setnumeroCurtidas] = useState(0);
   const [curtido, setCurtido] = useState(false);
   const [comentando, setComentando] = useState(false);
+  const [compartilhar, setCompartilhar] = useState(false);
   const [salvo, setSalvo] = useState(false);
   const [numeroComentarios, setNumeroComentarios] = useState(0);
   const [inputComentario, setInputComentario] = useState("");
+  const [listaDeComentarios, setListaDeComentarios] = useState({
+    comentarios: [],
+  });
 
   const onClickCurtida = () => {
     if (!curtido) {
@@ -91,11 +113,53 @@ function Post(props) {
     setInputComentario(e.target.value);
   };
 
+  const checkEmptyComment = () => {
+    if (inputComentario !== "") {
+      return false;
+    } else return true;
+  };
+
+  const adicionarComentario = () => {
+    if (checkEmptyComment()) {
+      console.log("Insira um comentário!");
+    } else {
+      const novoComentario = [inputComentario];
+
+      const novaListaComentarios = [
+        ...listaDeComentarios.comentarios,
+        novoComentario,
+      ];
+
+      const novoEstado = { comentarios: novaListaComentarios };
+
+      setListaDeComentarios(novoEstado);
+    }
+  };
+
   const aoEnviarComentario = () => {
     setComentando(false);
-    setNumeroComentarios(numeroComentarios + 1);
-    console.log(inputComentario);
+    if (!checkEmptyComment()) {
+      setNumeroComentarios(numeroComentarios + 1);
+    }
+    // console.log(inputComentario);
+    adicionarComentario();
   };
+
+  let componenteCompartilhar;
+
+  const onClickCompartilhar = () => {
+    setCompartilhar(!compartilhar);
+  };
+
+  const fecharSecaoCompartilhar = () => {
+    setCompartilhar(false);
+  };
+
+  const listandoComentarios = listaDeComentarios.comentarios.map(
+    (comentario, index) => {
+      return <CommentListLi key={index}>{comentario}</CommentListLi>;
+    }
+  );
 
   let iconeCurtida;
 
@@ -122,15 +186,25 @@ function Post(props) {
     );
   }
 
+  if (compartilhar) {
+    componenteCompartilhar = (
+      <SecaoCompartilhar
+        fecharSecaoCompartilhar={fecharSecaoCompartilhar}
+      ></SecaoCompartilhar>
+    );
+  }
+
   return (
     <PostContainer>
       <PostHeader>
-        <UserPhoto src={props.fotoUsuario} alt={"Imagem do usuario"} />
-        <p>{props.nomeUsuario}</p>
+        <NameImageDiv>
+          <UserPhoto src={props.fotoUsuario} alt={"Imagem do usuario"} />
+          <p>{props.nomeUsuario}</p>
+        </NameImageDiv>
+        <IconeComContador icone={iconeSalvo} onClickIcone={onClickSalvo} />
       </PostHeader>
 
       <PostPhoto src={props.fotoPost} alt={"Imagem do post"} />
-
       <PostFooter>
         <IconeComContador
           icone={iconeCurtida}
@@ -143,9 +217,14 @@ function Post(props) {
           onClickIcone={onClickComentario}
           valorContador={numeroComentarios}
         />
-        <IconeComContador icone={iconeSalvo} onClickIcone={onClickSalvo} />
+        <IconeComContador
+          icone={iconeCompartilhar}
+          onClickIcone={onClickCompartilhar}
+        />
       </PostFooter>
       {componenteComentario}
+      {listandoComentarios}
+      {componenteCompartilhar}
     </PostContainer>
   );
 }

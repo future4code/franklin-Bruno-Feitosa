@@ -127,17 +127,15 @@ const BalaoMensagem = styled.div`
 
 function AreaDeEnvio(props) {
   const [inputUsername, setInputUsername] = useState("");
-  const [username, setUsername] = useState("");
-
   const [inputMessage, setInputMessage] = useState("");
-  const [message, setMessage] = useState("");
 
   const [state, setState] = useState({
-    conversas: [{ nome: "", mensagem: "" }],
+    conversas: [],
   });
 
   const adicionandoMensagem = () => {
     const novaConversa = {
+      chave: Date.now(),
       nome: inputUsername,
       mensagem: inputMessage,
     };
@@ -148,17 +146,26 @@ function AreaDeEnvio(props) {
     setInputMessage("");
   };
 
-  // const apagandoMensagem = () => {
-  //   const arrayMensagens = [...state.conversas.mensagem];
-  //   arrayMensagens.findIndex((i) => {
-
-  //   })
-  // }
-
   const listandoConversa = state.conversas.map((conversa, index) => {
+    const apagandoMensagem = () => {
+      let resultado = window.confirm(`Deseja excluir a conversa selecionada?`);
+      if (resultado === true) {
+        const novaLista = [...state.conversas];
+        const indice = novaLista.findIndex(
+          (conversaProcurada) => conversa === conversaProcurada
+        );
+        novaLista.splice(indice, 1);
+        setState({ conversas: novaLista });
+      }
+    };
     if (conversa.nome === "eu" && conversa.mensagem !== "") {
       return (
-        <BalaoMensagem tipo={"eu"} key={index}>
+        <BalaoMensagem
+          id={conversa.chave}
+          onDoubleClick={apagandoMensagem}
+          tipo={"eu"}
+          key={index}
+        >
           <div>{conversa.mensagem}</div>
           <Doublecheck src={doublecheck} />
         </BalaoMensagem>
@@ -166,7 +173,8 @@ function AreaDeEnvio(props) {
     } else if (conversa.nome !== "" && conversa.mensagem !== "") {
       return (
         <BalaoMensagem
-          // onDoubleClick={apagandoMensagem}
+          id={conversa.chave}
+          onDoubleClick={apagandoMensagem}
           tipo={"outro"}
           key={index}
         >
@@ -207,8 +215,6 @@ function AreaDeEnvio(props) {
   };
 
   const submit = () => {
-    setUsername(inputUsername);
-    setMessage(inputMessage);
     adicionandoMensagem();
   };
 

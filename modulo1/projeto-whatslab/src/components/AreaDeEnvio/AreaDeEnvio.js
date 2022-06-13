@@ -5,6 +5,7 @@ import doublecheck from "../../img/doublecheck.svg";
 const ContainerAreaDeEnvio = styled.div`
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
 `;
 
 const AreaDeEnvioDiv = styled.div`
@@ -219,8 +220,8 @@ function AreaDeEnvio(props) {
   };
 
   return (
-    <ContainerAreaDeEnvio>
-      {listandoConversa}
+    <>
+      <ContainerAreaDeEnvio>{listandoConversa}</ContainerAreaDeEnvio>
       <AreaDeEnvioDiv>
         <AreaDeEnvioInputUser
           value={inputUsername}
@@ -238,7 +239,7 @@ function AreaDeEnvio(props) {
           Enviar
         </AreaDeEnvioButton>
       </AreaDeEnvioDiv>
-    </ContainerAreaDeEnvio>
+    </>
   );
 }
 

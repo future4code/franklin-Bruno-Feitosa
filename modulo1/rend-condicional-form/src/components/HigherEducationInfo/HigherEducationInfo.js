@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import OpenQuestion from "../OpenQuestion/OpenQuestion";
 
 const HigherEducationInfoDiv = styled.div`
   display: flex;
@@ -13,29 +14,22 @@ const HigherEducationInfoH1 = styled.h1`
   margin-bottom: 25px;
 `;
 
-const HigherEducationInfoLabel = styled.label`
-  font-weight: 600;
-`;
-
-const HigherEducationInfoInput = styled.input`
-  margin: 15px 0;
-  padding: 2px 10px;
-`;
-
-function HigherEducationInfo() {
+function HigherEducationInfo(props) {
   return (
     <HigherEducationInfoDiv>
       <HigherEducationInfoH1>
-        ETAPA 2 - INFORMAÇÕES DO ENSINO SUPERIOR
+        INFORMAÇÕES DO ENSINO SUPERIOR
       </HigherEducationInfoH1>
-      <HigherEducationInfoLabel for="which-course">
-        5. Qual curso?
-      </HigherEducationInfoLabel>
-      <HigherEducationInfoInput name="which-course" type="text" />
-      <HigherEducationInfoLabel for="which-university">
-        6. Qual a unidade de ensino?
-      </HigherEducationInfoLabel>
-      <HigherEducationInfoInput name="which-university" type="text" />
+      <OpenQuestion
+        pergunta={"5. Qual curso?"}
+        input={props.inputWhichCourse}
+        handleInput={props.handleInputWhichCourse}
+      />
+      <OpenQuestion
+        pergunta={"6. Qual a unidade de ensino?"}
+        input={props.inputUniversity}
+        handleInput={props.handleInputUniversity}
+      />
     </HigherEducationInfoDiv>
   );
 }

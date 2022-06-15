@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import ClosedQuestion from "../ClosedQuestion/ClosedQuestion";
+import OpenQuestion from "../OpenQuestion/OpenQuestion";
 
 const GeneralDataDiv = styled.div`
   display: flex;
@@ -13,101 +15,36 @@ const GeneralDataH1 = styled.h1`
   margin-bottom: 25px;
 `;
 
-const HigherEducationInfoLabel = styled.label`
-  font-weight: 600;
-`;
-
-const GeneralDataInput = styled.input`
-  margin: 15px 0;
-  padding: 2px 10px;
-`;
-
-const GeneralDataSelect = styled.select`
-  margin: 15px 0;
-  padding: 5px;
-`;
-
-function GeneralData() {
-  const [inputName, setInputName] = useState("");
-  const [inputAge, setInputAge] = useState("");
-  const [inputEmail, setInputEmail] = useState("");
-
-  // const [selectIncompleteHighSchool, setSelectIncompleteHighSchool] =
-  //   useState("");
-  // const [selectCompleteHighSchool, setSelectCompleteHighSchool] = useState(0);
-  // const [selectIncompleteHigher, setSelectIncompleteHigher] = useState(0);
-  // const [selectCompleteHigher, setSelectCompleteHigher] = useState(0);
-
-  const handleInputName = (e) => {
-    setInputName(e.target.value);
-  };
-  const handleInputAge = (e) => {
-    setInputAge(e.target.value);
-  };
-  const handleInputEmail = (e) => {
-    setInputEmail(e.target.value);
-  };
-
-  // const handleSelectIncompleteHighSchool = (e) => {
-  //   setSelectIncompleteHighSchool(e.target.value);
-  // };
-
-  let isCompleted = false;
-
-  const nextStep = () => {
-    if (inputName !== "" && inputAge !== "" && inputEmail !== "") {
-      isCompleted = true;
-    } else alert("Você precisa preencher todos os dados!");
-  };
-
+function GeneralData(props) {
   return (
     <GeneralDataDiv>
-      <GeneralDataH1>Etapa 1 - Dados Gerais</GeneralDataH1>
-      <HigherEducationInfoLabel for="name">
-        1. Qual seu nome?
-      </HigherEducationInfoLabel>
-      <GeneralDataInput
-        value={inputName}
-        onChange={handleInputName}
-        name="name"
-        type="text"
+      <GeneralDataH1>DADOS GERAIS</GeneralDataH1>
+      <OpenQuestion
+        handleInput={props.handleInputName}
+        input={props.inputName}
+        pergunta={"1. Qual seu nome?"}
       />
-      <HigherEducationInfoLabel for="age">
-        2. Qual sua idade?
-      </HigherEducationInfoLabel>
-      <GeneralDataInput
-        value={inputAge}
-        onChange={handleInputAge}
-        name="age"
-        type="text"
+      <OpenQuestion
+        handleInput={props.handleInputAge}
+        input={props.inputAge}
+        pergunta={"2. Qual sua idade?"}
       />
-      <HigherEducationInfoLabel for="email">
-        3. Qual seu email?
-      </HigherEducationInfoLabel>
-      <GeneralDataInput
-        value={inputEmail}
-        onChange={handleInputEmail}
-        name="email"
-        type="text"
+      <OpenQuestion
+        handleInput={props.handleInputEmail}
+        input={props.inputEmail}
+        pergunta={"3. Qual seu email?"}
       />
-      <HigherEducationInfoLabel for="education-level">
-        4. Qual sua escolaridade?
-      </HigherEducationInfoLabel>
-      <GeneralDataSelect name="education-level">
-        <option
-        // value={selectIncompleteHighSchool}
-        // onChange={handleSelectIncompleteHighSchool}
-        >
-          Ensino médio incompleto
-        </option>
-        <option value="complete-high-school">Ensino médio completo</option>
-        <option value="incomplete-higher-education">
-          Ensino superior incompleto
-        </option>
-        <option value="complete-higher-education">
-          Ensino superior completo
-        </option>
-      </GeneralDataSelect>
+      <ClosedQuestion
+        selectValue={props.selectValue}
+        handleSelectValue={props.handleSelectValue}
+        pergunta={"4. Qual a sua escolaridade?"}
+        options={[
+          "Ensino médio incompleto",
+          "Ensino médio completo",
+          "Ensino superior incompleto",
+          "Ensino superior completo",
+        ]}
+      />
     </GeneralDataDiv>
   );
 }

@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import ClosedQuestion from "../ClosedQuestion/ClosedQuestion";
+import OpenQuestion from "../OpenQuestion/OpenQuestion";
 
 const GeneralEducationInfoDiv = styled.div`
   display: flex;
@@ -13,38 +15,24 @@ const GeneralEducationInfoH1 = styled.h1`
   margin-bottom: 25px;
 `;
 
-const HigherEducationInfoLabel = styled.label`
-  font-weight: 600;
-`;
-
-const GeneralEducationInfoInput = styled.input`
-  margin: 15px 0;
-  padding: 2px 10px;
-`;
-
-const GeneralEducationInfoSelect = styled.select`
-  margin: 15px 0;
-  padding: 5px;
-`;
-
-function GeneralEducationInfo() {
+//6. Você fez algum curso complementar?
+function GeneralEducationInfo(props) {
   return (
     <GeneralEducationInfoDiv>
       <GeneralEducationInfoH1>
-        ETAPA 3 - INFORMAÇÕES GERAIS DE ENSINO
+        INFORMAÇÕES GERAIS DE ENSINO
       </GeneralEducationInfoH1>
-      <HigherEducationInfoLabel for="name">
-        5. Por que você não terminou um curso de graduação?
-      </HigherEducationInfoLabel>
-      <GeneralEducationInfoInput name="name" type="text" />
-      <HigherEducationInfoLabel for="complementary-course">
-        6. Você fez algum curso complementar?
-      </HigherEducationInfoLabel>
-      <GeneralEducationInfoSelect name="complementary-course">
-        <option value="none">Nenhum</option>
-        <option value="technical-course">Curso técnico</option>
-        <option value="english-course">Curso de inglês</option>
-      </GeneralEducationInfoSelect>
+      <OpenQuestion
+        pergunta={"5. Por que você não terminou um curso de graduação?"}
+        input={props.inputIncompleteGraduation}
+        handleInput={props.handleInputIncompleteGraduation}
+      />
+      <ClosedQuestion
+        selectValue={props.selectValue}
+        handleSelectValue={props.handleSelectValue}
+        pergunta={"6. Você fez algum curso complementar?"}
+        options={["Nenhum", "Curso técnico", "Curso de inglês"]}
+      />
     </GeneralEducationInfoDiv>
   );
 }

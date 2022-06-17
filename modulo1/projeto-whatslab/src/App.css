@@ -1,0 +1,14 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  border: 0.5px solid #202020;
+  display: flex;
+  flex-direction: column;
+  width: 50vw;
+  height: 100vh;
+  margin: 0 25%;
+  background: linear-gradient(#333333, #666666, #999999, #99999a);
+}

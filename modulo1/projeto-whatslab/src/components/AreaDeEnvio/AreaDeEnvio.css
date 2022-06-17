@@ -1,0 +1,21 @@
+.sending-area {
+  display: flex;
+  height: 10vh;
+  align-items: flex-end;
+}
+
+.sending-area-username {
+  width: 5vw;
+  text-align: center;
+  padding: 0.5rem 0.5rem;
+}
+
+.sending-area-content {
+  width: 40vw;
+  padding: 0.5rem 0.5rem;
+}
+
+.sending-area-submit {
+  min-width: 5vw;
+  padding: 0.5rem 0;
+}

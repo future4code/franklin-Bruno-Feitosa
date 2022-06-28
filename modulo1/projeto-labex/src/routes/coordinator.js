@@ -16,7 +16,7 @@ export const goToLastPage = (navigate) => {
   navigate(-1);
 };
 
-export const goFromLoginToHome = (navigate) => {
+export const goToHomePage = (navigate) => {
   navigate("/");
 };
 

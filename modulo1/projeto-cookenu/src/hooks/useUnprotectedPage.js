@@ -1,5 +1,6 @@
 import { useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ReRenderUnprotected from "../components/ReRenderUnprotected/ReRenderUnprotected";
 import { goToRecipesList } from "../routes/coordinator";
 
 const useUnprotectedPage = () => {
@@ -11,6 +12,7 @@ const useUnprotectedPage = () => {
       goToRecipesList(navigate);
     }
   }, [navigate]);
+  ReRenderUnprotected();
 };
 
 export default useUnprotectedPage;

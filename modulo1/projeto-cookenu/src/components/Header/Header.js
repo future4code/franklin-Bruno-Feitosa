@@ -29,7 +29,7 @@ const Header = (props) => {
       <StyledToolbar>
         <Button
           onClick={() => {
-            goToRecipesList(navigate);
+            token ? goToRecipesList(navigate) : goToLogin(navigate);
           }}
           color="inherit"
         >

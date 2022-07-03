@@ -21,7 +21,7 @@ export const goToHomePage = (navigate) => {
 };
 
 export const goToApplicationForm = (navigate) => {
-  navigate("/trips/application");
+  navigate(`/trips/application/`);
 };
 
 export const goToAdminPage = (navigate) => {

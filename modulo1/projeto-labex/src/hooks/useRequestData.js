@@ -1,20 +1,25 @@
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useState, useEffect } from "react";
 
-export const useRequestData = (url) => {
-  const [data, setData] = useState([undefined]);
+const useRequestData = (initialData, url) => {
+  const [data, setData] = useState(initialData);
 
-  const getData = () => {
+  useEffect(() => {
     axios
-      .get(url)
+      .get(url, {
+        headers: {
+          Authorization: "bruno-feitosa-franklin",
+        },
+      })
       .then((response) => {
         setData(response.data);
       })
       .catch((error) => {
-        console.log(error);
+        alert(error);
       });
-  };
+  }, [url]);
 
-  useEffect(getData, []);
-  return [data];
+  return data;
 };
+
+export default useRequestData;

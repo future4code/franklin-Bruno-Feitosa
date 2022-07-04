@@ -16,7 +16,8 @@ function App() {
   const [inputMusicName, setInputMusicName] = useState("");
   const [inputArtist, setInputArtist] = useState("");
   const [inputMusicUrl, setInputMusicUrl] = useState("");
-  const [trackDetail, setTrackDetail] = useState([]);
+  const [trackDetails, setTrackDetails] = useState([]);
+  const [playlistId, setPlaylistId] = useState("");
 
   const handleInputPlaylist = (e) => {
     setInputPlaylist(e.target.value);
@@ -102,19 +103,18 @@ function App() {
       });
   };
 
-  const getPlaylistTracks = (playlistId) => {
+  const getPlaylistTracks = () => {
     axios
       .get(
         `https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists/${playlistId}/tracks`,
         {
           headers: {
             Authorization: "bruno-feitosa-franklin",
-            "Content-Type": "application/json",
           },
         }
       )
       .then((response) => {
-        setTrackDetail(response.data.result.tracks);
+        setTrackDetails(response.data.result.tracks);
         // alert("Exibindo detalhes da playlist");
       })
       .catch((error) => {
@@ -139,10 +139,6 @@ function App() {
       .catch((error) => {
         console.log(error.message);
       });
-  };
-
-  const displayTrackDetails = () => {
-    return <TrackDetails />;
   };
 
   return (
@@ -189,10 +185,28 @@ function App() {
             >
               Apagar Playlist
             </button>
-            <button>Detalhes da Playlist</button>
+            <button
+              onClick={() => {
+                setPlaylistId(playlist.id);
+                getPlaylistTracks();
+              }}
+            >
+              Detalhes da Playlist
+            </button>
           </div>
         );
       })}
+      {trackDetails &&
+        trackDetails.length > 0 &&
+        trackDetails.map((track, index) => {
+          return (
+            <div key={index}>
+              <p>{`Artista: ${track.artist}`}</p>
+              <p>{`Nome da música: ${track.name}`}</p>
+              <iframe width={300} height={150} src={track.url}></iframe>
+            </div>
+          );
+        })}
     </div>
   );
 }

@@ -34,7 +34,10 @@ export const TripCandidatesCard = (props) => {
             Ficha do Candidato
           </Typography>
           <Typography marginTop={1}>{`Nome: ${name}`}</Typography>
-          <Typography marginTop={1}>{`Texto: ${applicationText}`}</Typography>
+          <Typography
+            style={{ wordWrap: "break-word" }}
+            marginTop={1}
+          >{`Texto: ${applicationText}`}</Typography>
           <Typography marginTop={1}>{<>{`Idade: ${age}`}</>}</Typography>
           <Typography marginTop={1}>
             {<>{`Profissão: ${profession}`}</>}
@@ -82,7 +85,10 @@ export const TripCandidatesCard = (props) => {
             Candidato Aprovado
           </Typography>
           <Typography marginTop={1}>{`Nome: ${name}`}</Typography>
-          <Typography marginTop={1}>{`Texto: ${applicationText}`}</Typography>
+          <Typography
+            style={{ wordWrap: "break-word" }}
+            marginTop={1}
+          >{`Texto: ${applicationText}`}</Typography>
           <Typography marginTop={1}>{<>{`Idade: ${age}`}</>}</Typography>
           <Typography marginTop={1}>
             {<>{`Profissão: ${profession}`}</>}

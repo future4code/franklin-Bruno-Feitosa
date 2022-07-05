@@ -17,12 +17,13 @@ import {
   DividerListDiv,
   ListButton,
   ListStyled,
+  LogoImageStyled,
   StyledToolbar,
 } from "./styled";
 import { Divider, Link, List, ListItem, SwipeableDrawer } from "@mui/material";
 import { BASE_URL } from "../../constants/urls";
 import { AppBar, Typography } from "@material-ui/core";
-import { green } from "@mui/material/colors";
+import logoMenu from "../../assets/logo-menu.png";
 
 export const Header = (props) => {
   const token = localStorage.getItem("token");
@@ -63,14 +64,11 @@ export const Header = (props) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            fontFamily={"Volkorn"}
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1 }}
-          >
+          <LogoImageStyled src={logoMenu} />
+          {/* <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             LabeX
-          </Typography>
+          </Typography> */}
+          {/* <img src={logoMenu} /> */}
           <Button color="inherit"></Button>
         </StyledToolbar>
         <SwipeableDrawer

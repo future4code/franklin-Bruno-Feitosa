@@ -8,6 +8,10 @@ export const StyledToolbar = styled(Toolbar)`
   flex-direction: row;
 `;
 
+export const LogoImageStyled = styled.img`
+  width: 80px;
+`;
+
 export const ListStyled = styled(List)`
   height: 100vh;
   background: #080c1f;
@@ -29,7 +33,6 @@ export const DividerListDiv = styled.div`
 
 export const DividerColor = styled(Divider)`
   background-color: #a89a3b;
-  width: 170px;
 `;
 
 export const ListButton = styled(Button)`

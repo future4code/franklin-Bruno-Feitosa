@@ -12,15 +12,16 @@ export const ScreenContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  height: 100vh;
   background-color: #080c1f;
 `;
 
 export const CarouselStyle = styled(Carousel)`
   width: 40vw;
   min-width: 350px;
-
-  /* background-color: blue; */
+  min-height: 200px;
+  overflow: visible;
+  padding-bottom: 0;
+  padding-bottom: 0.875rem;
 `;
 
 export const TripImage = styled.img`
@@ -31,12 +32,22 @@ export const TripImage = styled.img`
 export const TripDetailsContainer = styled.div`
   display: flex;
   flex-direction: column;
+  /* height: 42vh; */
 `;
 
 export const TripDetailsEmptyCandidateDiv = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* min-height: 400px; */
+`;
+
+export const TripDetailsEmptyApprovedDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  bottom: 100px;
 `;
 
 export const TripNameInfoDiv = styled.div`
@@ -56,4 +67,9 @@ export const DeleteTripButton = styled(Fab)`
   left: 20px;
   bottom: 20px;
   z-index: 3;
+`;
+
+export const Teste = styled.div`
+  margin-top: 1rem;
+  height: 50vh;
 `;

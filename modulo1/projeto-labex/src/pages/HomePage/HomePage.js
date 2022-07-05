@@ -2,7 +2,12 @@ import { Typography } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { goToLoginPage, goToTripListPage } from "../../routes/coordinator";
-import { ButtonContainerDiv, HomePageContainer, LogoImage } from "./styled";
+import {
+  ButtonContainerDiv,
+  HomePageContainer,
+  HomePageImage,
+  LogoImage,
+} from "./styled";
 import logo from "../../assets/logo.png";
 import { Button } from "@material-ui/core";
 
@@ -23,10 +28,11 @@ function HomePage() {
         >
           <Typography
             variant="h6"
-            fontSize={17}
+            fontSize={15}
             color={"white"}
             align={"center"}
             minWidth={250}
+            fontFamily={"Vollkorn SC"}
           >
             Login
           </Typography>
@@ -41,10 +47,11 @@ function HomePage() {
         >
           <Typography
             variant="h6"
-            fontSize={17}
+            fontSize={15}
             color={"white"}
             align={"center"}
             minWidth={250}
+            fontFamily={"Vollkorn SC"}
           >
             Lista de Viagens
           </Typography>

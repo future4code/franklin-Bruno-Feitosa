@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useProtectedPage from "../../hooks/useProtectedPage";
 import { BASE_URL } from "../../constants/urls";
@@ -8,6 +8,7 @@ import {
   CarouselStyle,
   DeleteTripButton,
   ScreenContainer,
+  Teste,
   TripDetailsContainer,
   TripDetailsEmptyCandidateDiv,
   TripImage,
@@ -31,86 +32,89 @@ function TripDetailsPage() {
     <>
       <ScreenContainer>
         {tripDetails ? (
-          <TripDetailsContainer>
+          <>
             <TripNameInfo name={tripDetails.name} />
             <Typography
               gutterBottom
               align={"center"}
               variant={"h5"}
-              color={"#dcdcdc"}
-              // marginTop={2}
-              // marginBottom={2}
+              color={"#a89a3b"}
+              marginTop={2}
+              marginBottom={2}
             >
               Candidatos
             </Typography>
-            <CarouselStyle>
-              {tripDetails && tripDetails.candidates.length > 0 ? (
-                tripDetails.candidates.map((candidate) => {
-                  return (
-                    <TripCandidatesCard
-                      key={candidate.id}
-                      name={candidate.name}
-                      age={candidate.age}
-                      applicationText={candidate.applicationText}
-                      profession={candidate.profession}
-                      country={candidate.country}
-                      type="candidato"
-                      navigate={navigate}
-                      setIsLoading={setIsLoading}
-                      id={id}
-                      candidateId={candidate.id}
-                    />
-                  );
-                })
-              ) : (
-                <TripDetailsEmptyCandidateDiv>
-                  <TripImage src={emptyImg} />
-                  <Typography
-                    gutterBottom
-                    align={"center"}
-                    variant={"h7"}
-                    color={"white"}
-                  >
-                    Ainda não temos candidatos.
-                  </Typography>
-                </TripDetailsEmptyCandidateDiv>
-              )}
-            </CarouselStyle>
-            <Typography
-              gutterBottom
-              align={"center"}
-              variant={"h5"}
-              color={"#dcdcdc"}
-              marginTop={2}
-              // marginBottom={2}
-            >
-              Aprovados
-            </Typography>
-            <CarouselStyle sx={{ paddingBottom: 4 }}>
-              {tripDetails && tripDetails.approved.length > 0 ? (
-                tripDetails.approved.map((approvedList) => {
-                  return (
-                    <TripCandidatesCard
-                      key={approvedList.id}
-                      name={approvedList.name}
-                      age={approvedList.age}
-                      applicationText={approvedList.applicationText}
-                      profession={approvedList.profession}
-                      country={approvedList.country}
-                      type="aprovado"
-                    />
-                  );
-                })
-              ) : (
-                <TripDetailsEmptyCandidateDiv>
-                  <TripImage src={emptyImg} />
-                  <Typography align={"center"} variant={"h7"} color={"white"}>
-                    Ainda não temos aprovados.
-                  </Typography>
-                </TripDetailsEmptyCandidateDiv>
-              )}
-            </CarouselStyle>
-          </TripDetailsContainer>
+            <TripDetailsContainer>
+              <CarouselStyle>
+                {tripDetails && tripDetails.candidates.length > 0 ? (
+                  tripDetails.candidates.map((candidate) => {
+                    return (
+                      <TripCandidatesCard
+                        key={candidate.id}
+                        name={candidate.name}
+                        age={candidate.age}
+                        applicationText={candidate.applicationText}
+                        profession={candidate.profession}
+                        country={candidate.country}
+                        type="candidato"
+                        navigate={navigate}
+                        setIsLoading={setIsLoading}
+                        id={id}
+                        candidateId={candidate.id}
+                      />
+                    );
+                  })
+                ) : (
+                  <TripDetailsEmptyCandidateDiv>
+                    <TripImage src={emptyImg} />
+                    <Typography
+                      gutterBottom
+                      align={"center"}
+                      variant={"h7"}
+                      color={"white"}
+                    >
+                      Ainda não temos candidatos.
+                    </Typography>
+                  </TripDetailsEmptyCandidateDiv>
+                )}
+              </CarouselStyle>
+            </TripDetailsContainer>
+            <Teste>
+              <Typography
+                gutterBottom
+                align={"center"}
+                variant={"h5"}
+                color={"#a89a3b"}
+                marginBottom={2}
+              >
+                Aprovados
+              </Typography>
+              <CarouselStyle>
+                {tripDetails && tripDetails.approved.length > 0 ? (
+                  tripDetails.approved.map((approvedList) => {
+                    return (
+                      <TripCandidatesCard
+                        key={approvedList.id}
+                        name={approvedList.name}
+                        age={approvedList.age}
+                        applicationText={approvedList.applicationText}
+                        profession={approvedList.profession}
+                        country={approvedList.country}
+                        type="aprovado"
+                      />
+                    );
+                  })
+                ) : (
+                  <TripDetailsEmptyCandidateDiv>
+                    <TripImage src={emptyImg} />
+                    <Typography align={"center"} variant={"h7"} color={"white"}>
+                      Ainda não temos aprovados.
+                    </Typography>
+                  </TripDetailsEmptyCandidateDiv>
+                )}
+              </CarouselStyle>
+            </Teste>
+          </>
         ) : (
           <Loading />
         )}

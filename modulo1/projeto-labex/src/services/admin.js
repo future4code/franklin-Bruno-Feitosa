@@ -24,6 +24,27 @@ export const createTrip = (body, clear, navigate, setIsLoading) => {
     });
 };
 
+export const deleteTrip = (navigate, setIsLoading, id) => {
+  setIsLoading(true);
+  axios
+    .delete(`${BASE_URL}/trips/${id}`, {
+      headers: {
+        auth: localStorage.getItem("token"),
+        "Content-Type": "application/json",
+      },
+    })
+    .then((response) => {
+      alert("Viagem deletada com sucesso");
+      setIsLoading(false);
+      goToTripListPage(navigate);
+    })
+    .catch((error) => {
+      console.log(error.response.data.message);
+      setIsLoading(false);
+      alert("Ocorreu um erro ao deletar a viagem");
+    });
+};
+
 export const tripDetails = (navigate, setIsLoading, id) => {
   setIsLoading(true);
   axios
@@ -47,10 +68,14 @@ export const decideCandidate = (
   navigate,
   setIsLoading,
   tripId,
-  candidateId
+  candidateId,
+  type
 ) => {
   setIsLoading(true);
   const body = { approve: true };
+
+  const bodyCheck =
+    type === "approve" ? (body.approve = true) : (body.approve = false);
   axios
     .put(`${BASE_URL}/trips/${tripId}/candidates/${candidateId}/decide`, body, {
       headers: {
@@ -59,7 +84,9 @@ export const decideCandidate = (
       },
     })
     .then((response) => {
-      alert("O candidato foi aprovado");
+      bodyCheck
+        ? alert("O candidato foi aprovado")
+        : alert("O candidato não foi aprovado");
       setIsLoading(false);
       goToTripListPage(navigate);
     })

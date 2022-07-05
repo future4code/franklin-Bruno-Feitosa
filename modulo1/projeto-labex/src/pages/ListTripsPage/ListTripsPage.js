@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { goToLastPage, goToCreateTrip } from "../../routes/coordinator";
+import { goToCreateTrip } from "../../routes/coordinator";
 import useRequestData from "../../hooks/useRequestData";
 import { BASE_URL } from "../../constants/urls";
 import { ListTripsCard } from "./ListTripsCard";
 import { CarouselStyle, CreateTripButton, TripListsContainer } from "./styled";
 import Add from "@mui/icons-material/Add";
 import { Typography } from "@mui/material";
+import { ListTripsBackgroundDiv } from "./styled";
+import Loading from "../../components/Loading/Loading";
 
 function ListTripsPage(props) {
   const getTrips = useRequestData([], `${BASE_URL}/trips`).trips;
@@ -16,20 +18,12 @@ function ListTripsPage(props) {
   let navigate = useNavigate();
 
   return (
-    <>
+    <ListTripsBackgroundDiv>
       <Typography
-        fontFamily={"Volkorn"}
-        marginTop={6}
-        color={"primary"}
-        variant={"h3"}
-        align={"center"}
-      >
-        LabeX
-      </Typography>
-      <Typography
+        marginTop={18}
+        marginBottom={2}
         fontFamily={"Tharlon"}
-        marginTop={6}
-        color={"primary"}
+        color={"#a89a3b"}
         variant={"h5"}
         align={"center"}
       >
@@ -64,7 +58,7 @@ function ListTripsPage(props) {
           <Add />
         </CreateTripButton>
       )}
-    </>
+    </ListTripsBackgroundDiv>
   );
 }
 

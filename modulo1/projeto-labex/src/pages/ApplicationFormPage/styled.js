@@ -5,7 +5,8 @@ export const ScreenContainer = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100vw;
-  margin-top: 10vh;
+  height: 100vh;
+  background-color: #080c1f;
 `;
 
 export const InputsContainer = styled.div`

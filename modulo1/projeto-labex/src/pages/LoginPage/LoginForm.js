@@ -4,13 +4,9 @@ import { goToHomePage } from "../../routes/coordinator";
 import useUnprotectedPage from "../../hooks/useUnprotectedPage";
 import { loginUser } from "../../services/user";
 import useForm from "../../hooks/useForm";
-import {
-  Button,
-  CircularProgress,
-  InputAdornment,
-  TextField,
-} from "@mui/material";
+import { CircularProgress, InputAdornment, TextField } from "@mui/material";
 import { InputsContainer, LockStyled, AccountCircleStyled } from "./styled";
+import { Button } from "@material-ui/core";
 
 const LoginForm = (props) => {
   useUnprotectedPage();
@@ -22,7 +18,6 @@ const LoginForm = (props) => {
   const onSubmitForm = (e) => {
     e.preventDefault();
     loginUser(form, clear, navigate, setIsLoading, setRightButtonText);
-    console.log(form);
   };
 
   return (
@@ -30,12 +25,16 @@ const LoginForm = (props) => {
       <InputsContainer>
         <form onSubmit={onSubmitForm}>
           <TextField
+            InputLabelProps={{
+              style: { color: "#a89a3b" },
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <AccountCircleStyled />
                 </InputAdornment>
               ),
+              style: { color: "#a89a3b" },
             }}
             name={"email"}
             value={form.email}
@@ -48,12 +47,16 @@ const LoginForm = (props) => {
             type={"email"}
           />
           <TextField
+            InputLabelProps={{
+              style: { color: "#a89a3b" },
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
                   <LockStyled />
                 </InputAdornment>
               ),
+              style: { marginBottom: 18, color: "#a89a3b" },
             }}
             name={"password"}
             value={form.password}

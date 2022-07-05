@@ -1,33 +1,39 @@
+import { Button } from "@material-ui/core";
 import { Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useProtectedPage from "../../hooks/useProtectedPage";
-import { goToLastPage } from "../../routes/coordinator";
+import { goToTripListPage } from "../../routes/coordinator";
 import CreateTripForm from "./CreateTripForm";
+import { ScreenContainer } from "./styled";
 
 function CreateTripPage() {
   useProtectedPage();
   let navigate = useNavigate();
 
   return (
-    <div>
+    <ScreenContainer>
       <Typography
-        gutterBottom
+        marginTop={15}
+        marginBottom={5}
         variant={"h4"}
         align={"center"}
-        color={"textPrimary"}
+        color={"white"}
       >
         Criar nova viagem
       </Typography>
       <CreateTripForm />
-      <button
+      <Button
+        fullWidth
+        variant="text"
+        color="primary"
         onClick={() => {
-          goToLastPage(navigate);
+          goToTripListPage(navigate);
         }}
       >
         Voltar
-      </button>
-    </div>
+      </Button>
+    </ScreenContainer>
   );
 }
 

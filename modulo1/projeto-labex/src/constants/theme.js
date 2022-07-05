@@ -1,5 +1,5 @@
 import { createTheme } from "@material-ui/core";
-import { primaryColor, neutralColor } from "./colors";
+import { primaryColor, neutralColor, buttonColor } from "./colors";
 
 const theme = createTheme({
   palette: {
@@ -8,11 +8,12 @@ const theme = createTheme({
       contrastText: "white",
     },
     secondary: {
-      main: neutralColor,
-      contrastText: "#080c1f",
+      main: buttonColor,
+      contrastText: "white",
     },
     text: {
-      primary: neutralColor,
+      main: "#000000",
+      secondary: neutralColor,
     },
   },
 });

@@ -1,11 +1,10 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { CardActionArea } from "@mui/material";
-import { CardStyled } from "./styled";
+import { ApproveButtonsDiv, CardStyled } from "./styled";
 import { decideCandidate } from "../../services/admin";
 import { Button } from "@material-ui/core";
+import { Typography } from "@mui/material";
 
 export const TripCandidatesCard = (props) => {
   const {
@@ -29,7 +28,7 @@ export const TripCandidatesCard = (props) => {
             gutterBottom
             align={"center"}
             variant={"h6"}
-            color={"primary"}
+            color={"#a89a3b"}
             marginBottom={4}
           >
             Ficha do Candidato
@@ -44,16 +43,30 @@ export const TripCandidatesCard = (props) => {
             marginTop={1}
             marginBottom={3}
           >{`País: ${country}`}</Typography>
-          <Button
-            fullWidth
-            onClick={() => {
-              decideCandidate(navigate, setIsLoading, id, candidateId);
-            }}
-            color={"primary"}
-            variant="contained"
-          >
-            Aprovar candidato
-          </Button>
+          <ApproveButtonsDiv>
+            <Button
+              fullWidth
+              onClick={() => {
+                const type = "approve";
+                decideCandidate(navigate, setIsLoading, id, candidateId, type);
+              }}
+              color={"primary"}
+              variant="contained"
+            >
+              Aprovar candidato
+            </Button>
+            <Button
+              fullWidth
+              onClick={() => {
+                const type = "disapprove";
+                decideCandidate(navigate, setIsLoading, id, candidateId, type);
+              }}
+              color={"secondary"}
+              variant="contained"
+            >
+              Reprovar candidato
+            </Button>
+          </ApproveButtonsDiv>
         </>
       );
     } else {
@@ -63,8 +76,8 @@ export const TripCandidatesCard = (props) => {
             gutterBottom
             align={"center"}
             variant={"h6"}
-            color={"primary"}
-            marginBottom={4}
+            color={"#a89a3b"}
+            paddingBottom={3}
           >
             Candidato Aprovado
           </Typography>

@@ -2,12 +2,10 @@ import { Typography } from "@mui/material";
 import styled from "styled-components";
 
 export const HomePageContainer = styled.div`
-  box-sizing: border-box;
   background-color: #080c1f;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100vw;
   height: 100vh;
 `;
 
@@ -18,4 +16,12 @@ export const ButtonContainerDiv = styled.div`
   gap: 1rem;
   display: flex;
   flex-direction: column;
+  /* justify-content: center; */
+`;
+
+export const LogoImage = styled.img`
+  width: 70vw;
+  max-width: 350px;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
 `;

@@ -1,9 +1,14 @@
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-import { CardContentFlex } from "./styled";
+import {
+  CardActionAreaStyled,
+  CardContentFlex,
+  CardMediaStyle,
+} from "./styled";
 import { useNavigate } from "react-router-dom";
 import { goToApplicationForm, goToTripDetails } from "../../routes/coordinator";
-import { Card, CardActionArea, CardMedia } from "@material-ui/core";
+import { Card, CardMedia } from "@material-ui/core";
+import rocketImg from "../../assets/img-foguete.png";
 
 export const ListTripsCard = (props) => {
   const { setTripName, id, name, description, planet, duration } = props;
@@ -19,25 +24,25 @@ export const ListTripsCard = (props) => {
   const navigate = useNavigate();
   return (
     <Card>
-      <CardActionArea
+      <CardActionAreaStyled
         onClick={() => {
           token ? goToTripDetails(navigate, id) : goToApplicationFormWithName();
         }}
       >
-        <CardMedia
+        <CardMediaStyle
           component="img"
-          height="140"
+          height={200}
           alt="galaxy photo"
-          src="https://media.istockphoto.com/photos/rocket-on-blue-background-3d-rendering-picture-id1317263545?b=1&k=20&m=1317263545&s=170667a&w=0&h=xuW63c1L4tNmvXXNRetC4ON3BwiQqw3MvSNlImkNF7g="
+          src={rocketImg}
         />
         <CardContentFlex>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography marginLeft={2} gutterBottom variant="h5" component="div">
             <>{name}</>
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography marginLeft={2} variant="body2" color="text.secondary">
             <>{description}</>
           </Typography>
-          <Typography variant="body3" color="text.secondary">
+          <Typography marginLeft={2} variant="body3" color="text.secondary">
             <>{`Planeta: ${planet}`}</>
           </Typography>
           <Typography
@@ -48,7 +53,7 @@ export const ListTripsCard = (props) => {
             <>{`Duração: ${duration} dias`}</>
           </Typography>
         </CardContentFlex>
-      </CardActionArea>
+      </CardActionAreaStyled>
     </Card>
   );
 };

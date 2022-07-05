@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useUnprotectedPage from "../../hooks/useUnprotectedPage";
 import useForm from "../../hooks/useForm";
-import { Button, CircularProgress, TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { InputsContainer } from "./styled";
 import { applyToTrip } from "../../services/user";
+import { Button } from "@material-ui/core";
 
 const ApplicationForm = () => {
   useUnprotectedPage();
+
   const [form, onChange, clear] = useForm({
     name: "",
     age: "",
@@ -36,6 +38,12 @@ const ApplicationForm = () => {
       <InputsContainer>
         <form onSubmit={onSubmitForm}>
           <TextField
+            InputLabelProps={{
+              style: { color: "#a89a3b" },
+            }}
+            InputProps={{
+              style: { color: "#a89a3b" },
+            }}
             name={"name"}
             value={form.name}
             onChange={onChange}
@@ -47,6 +55,12 @@ const ApplicationForm = () => {
             type={"text"}
           />
           <TextField
+            InputLabelProps={{
+              style: { color: "#a89a3b" },
+            }}
+            InputProps={{
+              style: { color: "#a89a3b" },
+            }}
             name={"age"}
             value={form.age}
             onChange={onChange}
@@ -58,6 +72,12 @@ const ApplicationForm = () => {
             type={"text"}
           />
           <TextField
+            InputLabelProps={{
+              style: { color: "#a89a3b" },
+            }}
+            InputProps={{
+              style: { color: "#a89a3b" },
+            }}
             name={"applicationText"}
             value={form.applicationText}
             onChange={onChange}
@@ -69,6 +89,12 @@ const ApplicationForm = () => {
             type={"text"}
           />
           <TextField
+            InputLabelProps={{
+              style: { color: "#a89a3b" },
+            }}
+            InputProps={{
+              style: { color: "#a89a3b" },
+            }}
             name={"profession"}
             value={form.profession}
             onChange={onChange}
@@ -81,6 +107,12 @@ const ApplicationForm = () => {
           />
 
           <TextField
+            InputLabelProps={{
+              style: { color: "#a89a3b" },
+            }}
+            InputProps={{
+              style: { color: "#a89a3b", marginBottom: 18 },
+            }}
             name={"country"}
             value={form.country}
             onChange={onChange}

@@ -4,8 +4,8 @@ import LoginForm from "./LoginForm";
 import { useNavigate } from "react-router-dom";
 import useUnprotectedPage from "../../hooks/useUnprotectedPage";
 import { goToHomePage } from "../../routes/coordinator";
-import { Button } from "@mui/material";
 import logo from "../../assets/logo.png";
+import { Button } from "@material-ui/core";
 
 const LoginPage = (props) => {
   const { setRightButtonText } = props;

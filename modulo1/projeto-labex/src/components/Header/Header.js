@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import {
   goToAdminPage,
   goToHomePage,
@@ -13,9 +10,19 @@ import {
   goToTripListPage,
 } from "../../routes/coordinator";
 import { useNavigate } from "react-router-dom";
-import { StyledToolbar } from "./styled";
+import {
+  ChevronDiv,
+  ChevronRightIconWhite,
+  DividerColor,
+  DividerListDiv,
+  ListButton,
+  ListStyled,
+  StyledToolbar,
+} from "./styled";
 import { Divider, Link, List, ListItem, SwipeableDrawer } from "@mui/material";
 import { BASE_URL } from "../../constants/urls";
+import { AppBar, Typography } from "@material-ui/core";
+import { green } from "@mui/material/colors";
 
 export const Header = (props) => {
   const token = localStorage.getItem("token");
@@ -72,46 +79,49 @@ export const Header = (props) => {
           onOpen={() => setOpen(true)}
           onClose={() => setOpen(false)}
         >
-          <div>
+          <ChevronDiv>
             <IconButton
               onClick={() => {
                 setOpen(false);
               }}
             >
-              <ChevronRightIcon />
+              <ChevronRightIconWhite />
             </IconButton>
-          </div>
+          </ChevronDiv>
           <Divider />
-          <List>
+          <ListStyled>
             {navigationLinks.map((item, index) => {
               return (
                 <ListItem key={index}>
                   <Link underline="none" variant="button" href={item.href}>
-                    <Button
-                      onClick={() => {
-                        if (item.name === "Home") {
-                          if (token) {
-                            goToAdminPage(navigate);
-                          } else {
-                            goToHomePage(navigate);
+                    <DividerListDiv>
+                      <ListButton
+                        onClick={() => {
+                          if (item.name === "Home") {
+                            if (token) {
+                              goToAdminPage(navigate);
+                            } else {
+                              goToHomePage(navigate);
+                            }
+                          } else if (item.name === "Lista de Viagens") {
+                            goToTripListPage(navigate);
+                          } else if (
+                            item.name === "Login" ||
+                            item.name === "Logout"
+                          ) {
+                            rightButtonAction();
                           }
-                        } else if (item.name === "Lista de Viagens") {
-                          goToTripListPage(navigate);
-                        } else if (
-                          item.name === "Login" ||
-                          item.name === "Logout"
-                        ) {
-                          rightButtonAction();
-                        }
-                      }}
-                    >
-                      {item.name}
-                    </Button>
+                        }}
+                      >
+                        {item.name}
+                      </ListButton>
+                      <DividerColor />
+                    </DividerListDiv>
                   </Link>
                 </ListItem>
               );
             })}
-          </List>
+          </ListStyled>
         </SwipeableDrawer>
       </AppBar>
     </Box>

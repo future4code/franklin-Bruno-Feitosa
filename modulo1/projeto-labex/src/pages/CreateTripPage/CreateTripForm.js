@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useProtectedPage from "../../hooks/useProtectedPage";
 import useForm from "../../hooks/useForm";
-import { Button, CircularProgress, TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { InputsContainer } from "./styled";
 import { createTrip } from "../../services/admin";
+import { Button } from "@material-ui/core";
 
 const CreateTripForm = () => {
   useProtectedPage();
@@ -29,6 +30,12 @@ const CreateTripForm = () => {
       <InputsContainer>
         <form onSubmit={onSubmitForm}>
           <TextField
+            InputLabelProps={{
+              style: { color: "#a89a3b" },
+            }}
+            InputProps={{
+              style: { color: "#a89a3b" },
+            }}
             name={"name"}
             value={form.name}
             onChange={onChange}
@@ -40,6 +47,12 @@ const CreateTripForm = () => {
             type={"text"}
           />
           <TextField
+            InputLabelProps={{
+              style: { color: "#a89a3b" },
+            }}
+            InputProps={{
+              style: { color: "#a89a3b" },
+            }}
             name={"planet"}
             value={form.planet}
             onChange={onChange}
@@ -51,6 +64,9 @@ const CreateTripForm = () => {
             type={"text"}
           />
           <TextField
+            InputProps={{
+              style: { color: "#a89a3b" },
+            }}
             name={"date"}
             value={form.date}
             onChange={onChange}
@@ -61,6 +77,12 @@ const CreateTripForm = () => {
             type={"date"}
           />
           <TextField
+            InputLabelProps={{
+              style: { color: "#a89a3b" },
+            }}
+            InputProps={{
+              style: { color: "#a89a3b" },
+            }}
             name={"description"}
             value={form.description}
             onChange={onChange}
@@ -72,6 +94,12 @@ const CreateTripForm = () => {
             type={"text"}
           />
           <TextField
+            InputLabelProps={{
+              style: { color: "#a89a3b" },
+            }}
+            InputProps={{
+              style: { marginBottom: 18, color: "#a89a3b" },
+            }}
             name={"durationInDays"}
             value={form.durationInDays}
             onChange={onChange}

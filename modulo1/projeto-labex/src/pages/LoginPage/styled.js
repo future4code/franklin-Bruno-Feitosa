@@ -26,8 +26,7 @@ export const GoToHomePageButtonDiv = styled.div`
 
 export const LogoImage = styled.img`
   width: 70vw;
-  /* max-width: 350px; */
-  border-radius: 100%;
+  max-width: 350px;
   margin-top: 5rem;
   margin-bottom: 2rem;
 `;

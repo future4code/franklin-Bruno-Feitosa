@@ -1,10 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { goToLastPage } from "../../routes/coordinator";
+import { goToLastPage, goToTripListPage } from "../../routes/coordinator";
 import useUnprotectedPage from "../../hooks/useUnprotectedPage";
 import ApplicationForm from "./ApplicationForm";
 import { ScreenContainer } from "./styled";
 import { Typography } from "@mui/material";
+import { Button } from "@material-ui/core";
 
 function ApplicationFormPage() {
   const tripName = localStorage.getItem("tripName");
@@ -14,31 +15,35 @@ function ApplicationFormPage() {
   return (
     <ScreenContainer>
       <Typography
+        marginTop={15}
         fontFamily={"Tharlon"}
-        variant={"h5"}
+        variant={"h4"}
         marginBottom={5}
         align={"center"}
-        color={"textPrimary"}
+        color={"#dcdcdc"}
       >
-        Formulário de Aplicação
+        {tripName}
       </Typography>
       <Typography
         fontFamily={"Tharlon"}
         variant={"h6"}
-        marginBottom={5}
+        marginBottom={3}
         align={"center"}
-        color={"textPrimary"}
+        color={"#a89a3b"}
       >
-        {tripName}
+        Formulário de Aplicação
       </Typography>
       <ApplicationForm />
-      <button
+      <Button
+        fullWidth
+        variant="text"
+        color="primary"
         onClick={() => {
-          goToLastPage(navigate);
+          goToTripListPage(navigate);
         }}
       >
         Voltar
-      </button>
+      </Button>
     </ScreenContainer>
   );
 }

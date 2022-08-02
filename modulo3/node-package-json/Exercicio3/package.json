@@ -1,0 +1,13 @@
+{
+  "name": "exercicio3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "listaDeTarefas": "node index.js 4 Estudar Trabalhar Jogar Dormir",
+    "start": "node index.js"
+  },
+  "author": "Bruno Britto",
+  "license": "ISC"
+}

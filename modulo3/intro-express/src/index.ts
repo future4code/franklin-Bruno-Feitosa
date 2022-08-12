@@ -33,8 +33,8 @@ const Bruno: User = {
   website: "www.bruno.com.br",
 };
 
-const baseDeDados: object[] = [
-  Bruno, // Coloquei o usuário criado na linha 28.
+const baseDeDadosUsers: User[] = [
+  Bruno, // User criado na linha 28.
   {
     id: 2,
     name: "Thiago Britto",
@@ -51,6 +51,58 @@ const baseDeDados: object[] = [
   },
 ];
 
+type Post = {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+};
+
+const Terror: Post = {
+  userId: 1,
+  id: 1,
+  title: "Recomendação de Terror",
+  body: "Para amantes do terror psicológico, recomendo o filme Us do Jordan Peele.",
+};
+
+const baseDeDadosPosts: Post[] = [
+  Terror,
+  {
+    userId: 2,
+    id: 2,
+    title: "Recomendação de Animes",
+    body: "Para amantes de animes, recomendo o Fullmetal Alchemist Brotherhood.",
+  },
+  {
+    userId: 3,
+    id: 3,
+    title: "Recomendação de FPS",
+    body: "Para amantes de jogos de tiro, recomendo o jogo Valorant.",
+  },
+  {
+    userId: 4,
+    id: 4,
+    title: "Recomendação de MOBA",
+    body: "Para amantes de jogos MOBA, recomendo o jogo League of Legends.",
+  },
+];
+
 app.get("/users", (request: Request, response: Response) => {
-  response.status(200).send(baseDeDados);
+  response.status(200).send(baseDeDadosUsers);
 });
+
+app.get("/posts", (request: Request, response: Response) => {
+  response.status(200).send(baseDeDadosPosts);
+});
+
+app.post("/posts/:userId", (request: Request, response: Response) => {
+  const userPost = Number(request.params.userId);
+  const filteredPost = baseDeDadosPosts.filter((post) => {
+    return post.userId === userPost;
+  });
+  response.status(200).send({ filteredPost });
+});
+
+// app.delete("/delete-post/:id", (request: Request, response: Response) => {
+//   response.status(200).send({ message: "O post foi deletado com sucesso." });
+// });

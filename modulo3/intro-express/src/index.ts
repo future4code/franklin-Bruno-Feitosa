@@ -25,6 +25,13 @@ type User = {
   website: string;
 };
 
+type Post = {
+  userId: number;
+  id: number;
+  title: string;
+  body: string;
+};
+
 const Bruno: User = {
   id: 1,
   name: "Bruno Britto",
@@ -50,13 +57,6 @@ const baseDeDadosUsers: User[] = [
     website: "www.lucas.com.br",
   },
 ];
-
-type Post = {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
-};
 
 const Terror: Post = {
   userId: 1,
@@ -87,6 +87,8 @@ const baseDeDadosPosts: Post[] = [
   },
 ];
 
+// todos
+
 app.get("/users", (request: Request, response: Response) => {
   response.status(200).send(baseDeDadosUsers);
 });
@@ -95,14 +97,24 @@ app.get("/posts", (request: Request, response: Response) => {
   response.status(200).send(baseDeDadosPosts);
 });
 
-app.post("/posts/:userId", (request: Request, response: Response) => {
-  const userPost = Number(request.params.userId);
+// específicos
+
+app.get("/posts/:userId", (request: Request, response: Response) => {
+  const userId: number = Number(request.params.userId);
   const filteredPost = baseDeDadosPosts.filter((post) => {
-    return post.userId === userPost;
+    return post.userId === userId;
   });
-  response.status(200).send({ filteredPost });
+  response.status(200).send({ Posts: filteredPost });
 });
 
-// app.delete("/delete-post/:id", (request: Request, response: Response) => {
-//   response.status(200).send({ message: "O post foi deletado com sucesso." });
-// });
+app.delete("/delete-post/:id", (request: Request, response: Response) => {
+  let id: number = Number(request.params.id);
+  const novaBaseDePosts: Post[] = [...baseDeDadosPosts];
+  const postRemovido = baseDeDadosPosts?.find((post) => {
+    return post.id === id;
+  });
+  novaBaseDePosts.splice(id - 1, 1);
+  response
+    .status(200)
+    .send({ Posts: novaBaseDePosts, postRemovido: postRemovido });
+});

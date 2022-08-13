@@ -56,6 +56,13 @@ const baseDeDadosUsers: User[] = [
     email: "lucas@email.com",
     website: "www.lucas.com.br",
   },
+  {
+    id: 4,
+    name: "Germana Marinho",
+    phone: "112421412",
+    email: "germana@email.com",
+    website: "www.germana.com.br",
+  },
 ];
 
 const Terror: Post = {
@@ -107,14 +114,33 @@ app.get("/posts/:userId", (request: Request, response: Response) => {
   response.status(200).send({ Posts: filteredPost });
 });
 
+// Deleta Post
 app.delete("/delete-post/:id", (request: Request, response: Response) => {
   let id: number = Number(request.params.id);
   const novaBaseDePosts: Post[] = [...baseDeDadosPosts];
   const postRemovido = baseDeDadosPosts?.find((post) => {
     return post.id === id;
   });
-  novaBaseDePosts.splice(id - 1, 1);
+
+  id >= 1 || id > novaBaseDePosts.length
+    ? novaBaseDePosts.splice(id - 1, 1)
+    : novaBaseDePosts;
   response
     .status(200)
     .send({ Posts: novaBaseDePosts, postRemovido: postRemovido });
+});
+
+// Deleta Usuário
+app.delete("/delete-user/:id", (request: Request, response: Response) => {
+  let id: number = Number(request.params.id);
+  const novaBaseDeUsers: User[] = [...baseDeDadosUsers];
+  const userRemovido = baseDeDadosUsers?.find((user) => {
+    return user.id === id;
+  });
+  id >= 1 || id > novaBaseDeUsers.length
+    ? novaBaseDeUsers.splice(id - 1, 1)
+    : novaBaseDeUsers;
+  response
+    .status(200)
+    .send({ Users: novaBaseDeUsers, userRemovido: userRemovido });
 });

@@ -1,4 +1,4 @@
-## Banco de Dados e Introdução a SQL
+## Aprofundamento SQL
 
 ### Exercício 1:
 

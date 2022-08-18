@@ -253,7 +253,7 @@ SELECT * FROM Movie ORDER BY title DESC LIMIT 5;
 
 #### c)
 
-OBS: Como são filmes que estão em cartaz, adicionei a verificação `CURDATE() < playing_limit_date` pois a data atual tem que ser menor que a data de limite do filme. Caso seja maior, não estará mais em cartaz.
+Como são filmes que estão em cartaz, adicionei a verificação `CURDATE() < playing_limit_date` pois a data atual tem que ser menor que a data de limite do filme. Caso seja maior, não estará mais em cartaz.
 
 ```
 SELECT * FROM Movie WHERE release_Date < CURDATE() AND CURDATE() < playing_limit_date ORDER BY release_Date DESC LIMIT 3;

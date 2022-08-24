@@ -1,56 +1,33 @@
-import { Response, Request } from "express";
-import { stringify } from "querystring";
 import app from "./app";
-import connection from "./connection";
+import { averageSalaryByGender } from "./endpoints/averageSalaryByGender/averageSalaryByGender";
+import { countActorsByGender } from "./endpoints/countActorsByGender/countActorsByGender";
+import { createMovie } from "./endpoints/createMovie/createMovie";
+import { deleteActor } from "./endpoints/deleteActor/deleteActor";
+import { displayAllMovies } from "./endpoints/displayAllMovies/displayAllMovies";
+import { getActorsById } from "./endpoints/getActorsById/getActorsById";
+import { getActorsByName } from "./endpoints/getActorsByName/getActorsByName";
+import { getItensQuantityByGender } from "./endpoints/getItensQuantityByGender/getItensQuantityByGender";
+import { getMoviesBySearchTerm } from "./endpoints/getMoviesBySearchTerm/getMoviesBySearchTerm";
+import { updateSalary } from "./endpoints/updateSalary/updateSalary";
 
-const getActorsById = async (id: string): Promise<any> => {
-  const result = await connection.raw(`
-    SELECT * FROM Actor WHERE ID = ${id}`);
-  return result[0][0];
-};
+app.get("/actorsById/:id", getActorsById);
 
-const getActorsByName = async (nome: string): Promise<any> => {
-  const result = await connection.raw(`
-    SELECT * FROM Actor WHERE nome = ${nome}`);
-  return result[0][0];
-};
+app.get("/actorsByName/:nome", getActorsByName);
 
-const getItensQuantityByGender = async (gender: string): Promise<any> => {
-  const result = await connection.raw(`
-  SELECT COUNT(*) FROM Actor WHERE gender = ${gender}
-  `);
-  return result[0][0];
-};
+app.get("/itensQuantityByGender/:gender", getItensQuantityByGender);
 
-app.get("/actorsById/:id", async (req: Request, res: Response) => {
-  try {
-    const id: string = req.params.id;
-    res.send(await getActorsById(id));
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Unexpected error");
-  }
-});
+app.post("/updateSalary/:id", updateSalary);
 
-app.get("/actorsByName/:nome", async (req: Request, res: Response) => {
-  try {
-    const nome: string = req.params.nome;
-    res.send(await getActorsByName(nome));
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("Unexpected error");
-  }
-});
+app.delete("/deleteActor/:id", deleteActor);
 
-app.get(
-  "/itensQuantityByGender/:gender",
-  async (req: Request, res: Response) => {
-    try {
-      const gender: string = req.params.gender;
-      res.send(await getItensQuantityByGender(gender));
-    } catch (error) {
-      console.log(error);
-      res.status(500).send("Unexpected error");
-    }
-  }
-);
+app.get("/averageSalaryByGender/:gender", averageSalaryByGender);
+
+app.get("/countActorsByGender", countActorsByGender);
+
+// Desafios
+
+app.post("/createMovie", createMovie);
+
+app.get("/allMovies", displayAllMovies);
+
+app.get("/moviesSearch", getMoviesBySearchTerm);

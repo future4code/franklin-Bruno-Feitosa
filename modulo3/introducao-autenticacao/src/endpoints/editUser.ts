@@ -1,32 +1,39 @@
 import { Request, Response } from "express";
 import connection from "../connection";
+import { Authenticator } from "../services/Authenticator";
+import { AuthenticationData } from "../types";
 
-export default async function createUser(
-   req: Request,
-   res: Response
+export default async function editUser(
+  req: Request,
+  res: Response
 ): Promise<void> {
-   try {
+  try {
+    const { email } = req.body;
+    const token = req.headers.authorization as string;
 
-      const { name, nickname } = req.body
+    if (!token) {
+      res.statusCode = 422;
+      res.statusMessage = "Token não informado";
+      throw new Error();
+    }
 
-      if (!name && !nickname) {
-         res.statusCode = 422
-         res.statusMessage = "Informe o(s) novo(s) 'name' ou 'nickname'"
-         throw new Error()
-      }
+    const authenticator = new Authenticator();
+    const tokenData = authenticator.getTokenData(token) as AuthenticationData;
 
-      await connection('to_do_list_users')
-         .update({ name, nickname })
-         .where({ id: req.params.id })
+    if (!tokenData) {
+      req.statusCode = 401;
+      req.statusMessage = "Token inválido";
+      throw new Error();
+    }
 
-      res.end()
+    await connection("User").update({ email }).where({ id: tokenData.id });
 
-   } catch (error) {
+    res.end();
+  } catch (error) {
+    if (res.statusCode === 200) {
+      res.status(500).end();
+    }
 
-      if (res.statusCode === 200) {
-         res.status(500).end()
-      }
-
-      res.end()
-   }
+    res.end();
+  }
 }

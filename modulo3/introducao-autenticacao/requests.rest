@@ -3,20 +3,37 @@
 POST http://localhost:3003/user/signup
 Content-Type: application/json
 
-{
-   "name": "Norman Osbourne", 
-   "nickname": "Green Goblin", 
+{ 
    "email": "osbourne@oscorp.com" ,
    "password": "ihatepeter"
 }
 
 ###
-
-@id = {{signup.response.body.newUser.id}}
-
-PUT http://localhost:3003/user/edit/{{id}}
+# @name login
+POST http://localhost:3003/user/login
 Content-Type: application/json
 
 {
-   "name": "Harry Osbourne" 
+   "email": "osbourne@oscorp.com",
+   "password": "ihatepeter"
 }
+
+###
+
+@token = {{login.response.body.accessToken}}
+
+PUT http://localhost:3003/user/edit
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+   "email": "osbourne@oscorp.com"
+}
+
+###
+
+@token = {{login.response.body.accessToken}}
+
+GET http://localhost:3003/user/profile
+Content-Type: application/json
+Authorization: {{token}}

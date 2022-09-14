@@ -7,3 +7,24 @@ Content-Type: application/json
     "email": "beltrano@gmail.com",
     "password": "abc123"
 }
+
+### 2) Login
+# @name login
+POST http://localhost:3003/users/login
+Content-Type: application/json
+
+{
+    "email": "beltrano@gmail.com",
+    "password": "abc123"
+}
+
+### 3) getAllUsers
+GET http://localhost:3003/users/all
+Authorization: {{login.response.body.token}}
+Content-Type: application/json
+
+### 4) deleteUser
+@id = bb9b7ee8-ae4b-4bd1-9bd6-e7e21594399b
+DELETE http://localhost:3003/users/{{id}}
+Authorization: {{login.response.body.token}}
+Content-Type: application/json

@@ -27,7 +27,9 @@ export default class UserDatabase extends BaseDatabase {
   };
 
   public searchUserById = async (id: string) => {
-    const user = await BaseDatabase.connection(UserDatabase.TABLE_USERS)
+    const user: IUserDB[] = await BaseDatabase.connection(
+      UserDatabase.TABLE_USERS
+    )
       .select("*")
       .where({
         id,

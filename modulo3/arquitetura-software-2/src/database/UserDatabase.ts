@@ -1,10 +1,10 @@
-import { IUserDB, User } from "../models/User";
+import { IGetUserInputDBDTO, IUserDB, User } from "../models/User";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class UserDatabase extends BaseDatabase {
   public static TABLE_USERS = "Arq2_Users";
 
-  public findByEmail = async (email: string) => {
+  public findByEmail = async (email: string): Promise<IUserDB> => {
     const usersDB: IUserDB[] = await BaseDatabase.connection(
       UserDatabase.TABLE_USERS
     )
@@ -14,7 +14,7 @@ export class UserDatabase extends BaseDatabase {
     return usersDB[0];
   };
 
-  public createUser = async (user: User) => {
+  public createUser = async (user: User): Promise<void> => {
     const userDB: IUserDB = {
       id: user.getId(),
       name: user.getName(),
@@ -26,7 +26,7 @@ export class UserDatabase extends BaseDatabase {
     await BaseDatabase.connection(UserDatabase.TABLE_USERS).insert(userDB);
   };
 
-  public getUsers = async (input: any) => {
+  public getUsers = async (input: IGetUserInputDBDTO): Promise<IUserDB[]> => {
     const search = input.search;
     const order = input.order;
     const sort = input.sort;
@@ -45,7 +45,7 @@ export class UserDatabase extends BaseDatabase {
     return usersDB;
   };
 
-  public findById = async (id: string) => {
+  public findById = async (id: string): Promise<IUserDB> => {
     const usersDB: IUserDB[] = await BaseDatabase.connection(
       UserDatabase.TABLE_USERS
     )
@@ -55,13 +55,13 @@ export class UserDatabase extends BaseDatabase {
     return usersDB[0];
   };
 
-  public deleteUser = async (id: string) => {
+  public deleteUser = async (id: string): Promise<void> => {
     await BaseDatabase.connection(UserDatabase.TABLE_USERS)
       .delete()
       .where({ id });
   };
 
-  public editUser = async (user: User) => {
+  public editUser = async (user: User): Promise<void> => {
     const userDB: IUserDB = {
       id: user.getId(),
       name: user.getName(),

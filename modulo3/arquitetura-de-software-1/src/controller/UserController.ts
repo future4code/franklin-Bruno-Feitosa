@@ -64,9 +64,14 @@ export default class UserController {
       const token = req.headers.authorization as string;
       const id: string = req.params.id;
 
+      const input = {
+        token,
+        id,
+      };
+
       const userBusiness = new UserBusiness();
 
-      const response = await userBusiness.deleteUser(token, id);
+      const response = await userBusiness.deleteUser(input);
       res.status(202).send(response);
     } catch (error) {
       if (error instanceof Error) {

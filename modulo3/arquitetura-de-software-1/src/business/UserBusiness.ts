@@ -115,27 +115,40 @@ export default class UserBusiness {
     return response;
   };
 
-  public deleteUser = async (token: string, id: string): Promise<any> => {
-    const tokenDb: string = token;
-    const idDb: string = id;
+  public deleteUser = async (input: any): Promise<any> => {
+    const accessToken: string = input.token;
+    const idToDelete: string = input.id;
 
-    if (!idDb) {
+    const authenticator = new Authenticator();
+    const tokenInfo = authenticator.getTokenPayload(accessToken);
+
+    if (!idToDelete) {
       throw new Error("Id não encontrado");
     }
 
-    if (!tokenDb) {
+    if (!accessToken) {
       throw new Error("Acesso não autorizado");
     }
 
     const userDatabase = new UserDatabase();
 
-    const searchById = await userDatabase.searchUserById(id);
+    const userAuth = await userDatabase.searchUserById(tokenInfo.id);
+
+    if (userAuth.role !== USER_ROLES.ADMIN) {
+      throw new Error("Não autorizado");
+    }
+
+    const searchById = await userDatabase.searchUserById(idToDelete);
 
     if (!searchById) {
       throw new Error("Usuário não existe");
     }
 
-    await userDatabase.deleteUserFromDb(id);
+    if (tokenInfo.id === searchById.id) {
+      throw new Error("Você não pode deletar sua própria conta");
+    }
+
+    await userDatabase.deleteUserFromDb(idToDelete);
 
     const response = { message: "Usuário apagado com sucesso!" };
 

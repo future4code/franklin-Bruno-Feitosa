@@ -17,8 +17,8 @@ const userController = new UserController(
   )
 );
 
-userRoutes.post("/users/signup", userController.signup);
-// userRoutes.post("/users/login", UserController.login);
+userRoutes.post("/signup", userController.signup);
+userRoutes.post("/login", userController.login);
 // userRoutes.get("/users/", UserController.getUsers);
 // userRoutes.delete("/users/:id", UserController.deleteUser);
 // userRoutes.put("/users/:id", UserController.editUser);

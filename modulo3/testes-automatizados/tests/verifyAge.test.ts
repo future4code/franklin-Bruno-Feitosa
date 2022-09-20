@@ -1,7 +1,4 @@
 import { verifyAge, User, NACIONALITY, Casino, LOCATION } from "./verifyAge";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 describe("Testing verifyAge function", () => {
   test("Testing 1 brazilian allowed", () => {

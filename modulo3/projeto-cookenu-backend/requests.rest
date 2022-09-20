@@ -12,7 +12,6 @@ Content-Type: application/json
 
 ### Signup
 # @name login
-
 POST http://localhost:3003/users/login
 Content-Type: application/json
 
@@ -20,3 +19,9 @@ Content-Type: application/json
     "email": "bruno@email.com",
     "password": "123456"
 }
+
+
+### Info
+GET http://localhost:3003/users/info
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}

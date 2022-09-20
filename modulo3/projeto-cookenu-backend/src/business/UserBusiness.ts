@@ -1,6 +1,7 @@
 import { response } from "express";
 import { UserDatabase } from "../database/UserDatabase";
 import {
+  GetInfoOutputDTO,
   ILoginInputDTO,
   ISignupInputDTO,
   User,
@@ -131,6 +132,27 @@ export class UserBusiness {
     const response = {
       message: "Login realizado com sucesso",
       accessToken: token,
+    };
+
+    return response;
+  };
+
+  public getInfo = async (token: string) => {
+    if (!token) {
+      throw new Error("Token não informado");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Token inválido");
+    }
+
+    const user = await this.UserDatabase.getUserById(tokenInfo.id);
+
+    const response: GetInfoOutputDTO = {
+      id: user.id,
+      email: user.email,
     };
 
     return response;

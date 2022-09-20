@@ -35,7 +35,9 @@ export class User {
   };
 }
 
-export interface ISignupInputDBDTO {}
+// export interface ISignupInputDBDTO {
+
+// }
 
 export interface ISignupInputDTO {
   name: string;
@@ -52,4 +54,8 @@ export interface IUserDB {
 export interface ILoginInputDTO {
   email: string;
   password: string;
+}
+export interface GetInfoOutputDTO {
+  id: string;
+  email: string;
 }

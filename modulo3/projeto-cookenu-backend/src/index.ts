@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { userRoutes } from "./routes/userRoutes";
+import { recipeRoutes } from "./routes/recipeRoutes";
 
 dotenv.config();
 
@@ -13,4 +14,5 @@ app.listen(process.env.PORT || 3003, () => {
   console.log(`Servidor rodando na porta ${process.env.PORT || 3003}`);
 });
 
-app.use("/users", userRoutes);
+app.use("/user", userRoutes);
+app.use("/recipe", recipeRoutes);

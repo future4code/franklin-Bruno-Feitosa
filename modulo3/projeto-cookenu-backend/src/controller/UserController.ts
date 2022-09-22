@@ -56,4 +56,20 @@ export class UserController {
       res.status(500).send({ message: "Internal Server Error" });
     }
   };
+
+  public getInfoById = async (req: Request, res: Response) => {
+    try {
+      const token = req.headers.authorization as string;
+      const id = req.params.id as string;
+
+      const response = await this.userBusiness.getInfoById(token, id);
+
+      res.status(202).send(response);
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).send({ message: error.message });
+      }
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  };
 }

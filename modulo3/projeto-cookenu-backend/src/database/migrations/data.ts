@@ -1,3 +1,4 @@
+import { IRecipesDB } from "../../models/Recipe";
 import { IUserDB, USER_ROLES } from "../../models/User";
 
 export const users: IUserDB[] = [

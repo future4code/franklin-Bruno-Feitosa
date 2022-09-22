@@ -57,5 +57,6 @@ export interface ILoginInputDTO {
 }
 export interface GetInfoOutputDTO {
   id: string;
+  name: string;
   email: string;
 }

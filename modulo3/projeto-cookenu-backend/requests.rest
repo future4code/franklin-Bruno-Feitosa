@@ -1,7 +1,7 @@
 ### Signup
 # @name signup
 
-POST http://localhost:3003/users/signup
+POST http://localhost:3003/user/signup
 Content-Type: application/json
 
 {
@@ -10,9 +10,9 @@ Content-Type: application/json
     "password": "123456"
 }
 
-### Signup
+### Login
 # @name login
-POST http://localhost:3003/users/login
+POST http://localhost:3003/user/login
 Content-Type: application/json
 
 {
@@ -22,6 +22,28 @@ Content-Type: application/json
 
 
 ### Info
-GET http://localhost:3003/users/info
+GET http://localhost:3003/user/profile
 Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
+
+### Info By Id
+@id = f03017bb-2c08-4cdc-bb63-7fbd7cebe01f
+GET http://localhost:3003/user/{{id}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+
+### RECIPES
+
+### Create Recipe
+
+POST http://localhost:3003/recipe
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+{
+    "title": "Pizza",
+    "description": "Pizza de frango",
+    "step_by_step":
+      "Pegue a massa, passe o molho de tomate, jogue o queijo e o frango por cima. Caso queira, finalize com orégano."
+}

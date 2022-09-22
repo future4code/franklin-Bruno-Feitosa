@@ -152,6 +152,37 @@ export class UserBusiness {
 
     const response: GetInfoOutputDTO = {
       id: user.id,
+      name: user.name,
+      email: user.email,
+    };
+
+    return response;
+  };
+
+  public getInfoById = async (token: string, id: string) => {
+    if (!id) {
+      throw new Error("Id não informado");
+    }
+
+    if (!token) {
+      throw new Error("Token não informado");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Token inválido");
+    }
+
+    const user = await this.UserDatabase.getUserById(id);
+
+    if (!user) {
+      throw new Error("Usuário não encontrado com esse id");
+    }
+
+    const response: GetInfoOutputDTO = {
+      id: user.id,
+      name: user.name,
       email: user.email,
     };
 

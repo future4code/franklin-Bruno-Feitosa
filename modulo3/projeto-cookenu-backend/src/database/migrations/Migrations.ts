@@ -1,4 +1,5 @@
 import { BaseDatabase } from "../BaseDatabase";
+import { RecipeDatabase } from "../RecipeDatabase";
 import { UserDatabase } from "../UserDatabase";
 import { users } from "./data";
 
@@ -26,6 +27,7 @@ class Migrations extends BaseDatabase {
 
   createTables = async () => {
     await BaseDatabase.connection.raw(`
+        DROP TABLE IF EXISTS ${RecipeDatabase.TABLE_RECIPES};
         DROP TABLE IF EXISTS ${UserDatabase.TABLE_USERS};
         
         CREATE TABLE IF NOT EXISTS ${UserDatabase.TABLE_USERS}(
@@ -35,6 +37,15 @@ class Migrations extends BaseDatabase {
             password VARCHAR(255) NOT NULL,
             role ENUM("NORMAL", "ADMIN") DEFAULT "NORMAL" NOT NULL
         );
+        
+          CREATE TABLE Cookenu_Recipes(
+          title VARCHAR(255) NOT NULL,
+          description VARCHAR(255) NOT NULL,
+          step_by_step TEXT NOT NULL,
+          creation_date VARCHAR(255) NOT NULL,
+          user_id VARCHAR(255) NOT NULL,
+          user_name VARCHAR(255) NOT NULL
+          )
         `);
   };
 

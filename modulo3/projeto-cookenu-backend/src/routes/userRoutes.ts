@@ -19,7 +19,10 @@ const userController = new UserController(
 
 userRoutes.post("/signup", userController.signup);
 userRoutes.post("/login", userController.login);
+userRoutes.post("/follow", userController.follow);
+userRoutes.post("/unfollow", userController.unfollow);
 userRoutes.get("/profile", userController.getInfo);
+userRoutes.get("/feed", userController.feed);
 userRoutes.get("/:id", userController.getInfoById);
 // userRoutes.get("/", UserController.getUsers);
 // userRoutes.delete("/users/:id", UserController.deleteUser);

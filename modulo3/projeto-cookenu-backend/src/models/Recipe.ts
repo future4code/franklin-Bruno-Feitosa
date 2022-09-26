@@ -40,6 +40,7 @@ export interface ICreateRecipeInputDTO {
 }
 
 export interface IRecipesDB {
+  id: string;
   title: string;
   description: string;
   step_by_step: string;
@@ -48,11 +49,9 @@ export interface IRecipesDB {
   user_name: string;
 }
 
-// export interface ILoginInputDTO {
-//   email: string;
-//   password: string;
-// }
-// export interface GetInfoOutputDTO {
-//   id: string;
-//   email: string;
-// }
+export interface GetRecipeOutputDTO {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: string;
+}

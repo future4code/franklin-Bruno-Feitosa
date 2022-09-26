@@ -20,18 +20,21 @@ Content-Type: application/json
     "password": "123456"
 }
 
-
 ### Info
 GET http://localhost:3003/user/profile
 Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
-### Info By Id
-@id = f03017bb-2c08-4cdc-bb63-7fbd7cebe01f
-GET http://localhost:3003/user/{{id}}
+### Get Feed
+GET http://localhost:3003/user/feed
 Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
+### Info By Id
+@userId = f03017bb-2c08-4cdc-bb63-7fbd7cebe01f
+GET http://localhost:3003/user/{{userId}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
 
 ### RECIPES
 
@@ -42,8 +45,34 @@ Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
 {
-    "title": "Pizza",
-    "description": "Pizza de frango",
+    "title": "Hamburguer",
+    "description": "Hamburguer Podrão",
     "step_by_step":
-      "Pegue a massa, passe o molho de tomate, jogue o queijo e o frango por cima. Caso queira, finalize com orégano."
+      "Pegue o pão, faça aqueles hamburgueres de supermercado e jogue tudo que tiver dentro da geladeira nele."
+}
+
+### Get Recipe
+@recipeId = b3eae06c-0741-4b85-83ab-75189cf5f3cb
+GET http://localhost:3003/recipe/{{recipeId}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+
+### FOLLOW
+
+### Follow User
+POST http://localhost:3003/user/follow
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+{
+    "idToFollow": "2d406fc5-d020-4b60-a002-68e5d8aa911f"
+}
+### Unfollow User
+POST http://localhost:3003/user/unfollow
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+{
+    "idToUnfollow": "7079b8e4-95cd-48aa-82a9-77454e94b789"
 }

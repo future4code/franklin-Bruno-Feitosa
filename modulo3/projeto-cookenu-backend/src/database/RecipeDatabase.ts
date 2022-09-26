@@ -4,32 +4,61 @@ import { BaseDatabase } from "./BaseDatabase";
 
 export class RecipeDatabase extends BaseDatabase {
   public static TABLE_RECIPES = "Cookenu_Recipes";
+  public static TABLE_USERS = "Cookenu_Users";
 
   public toRecipeDBModel = (
+    id: string,
     recipe: Recipe,
     name: string,
-    id: string
+    userId: string
   ): IRecipesDB => {
     const recipeDb: IRecipesDB = {
+      id: id,
       title: recipe.getTitle(),
       description: recipe.getDescription(),
       step_by_step: recipe.getStepByStep(),
       creation_date: new Date().toLocaleString(),
-      user_id: id,
+      user_id: userId,
       user_name: name,
     };
 
     return recipeDb;
   };
 
-  public createRecipe = async (
+  public createRecipeDB = async (
+    id: string,
     recipe: Recipe,
     name: string,
-    id: string
+    userId: string
   ): Promise<void> => {
-    const recipesDb: IRecipesDB = this.toRecipeDBModel(recipe, id, name);
+    const recipesDb: IRecipesDB = this.toRecipeDBModel(
+      id,
+      recipe,
+      userId,
+      name
+    );
     await BaseDatabase.connection(RecipeDatabase.TABLE_RECIPES).insert(
       recipesDb
     );
+  };
+
+  public getRecipeById = async (id: string): Promise<IRecipesDB> => {
+    const result: IRecipesDB[] = await BaseDatabase.connection(
+      RecipeDatabase.TABLE_RECIPES
+    )
+      .select("*")
+      .where({ id });
+
+    return result[0];
+  };
+
+  public getUserById = async (id: string): Promise<IUserDB> => {
+    const result: IUserDB[] = await BaseDatabase.connection(
+      RecipeDatabase.TABLE_USERS
+    )
+      .select("*")
+      .where({ id });
+
+    return result[0];
   };
 }

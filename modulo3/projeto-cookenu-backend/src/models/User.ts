@@ -60,3 +60,33 @@ export interface GetInfoOutputDTO {
   name: string;
   email: string;
 }
+export interface IGetInfoInputDTO {
+  token: string;
+  id: string;
+}
+export interface IFollowInputDTO {
+  token: string;
+  idToFollow: string;
+}
+export interface IUnfollowInputDTO {
+  token: string;
+  idToUnfollow: string;
+}
+export interface IFollowOutputDTO {
+  message: string;
+}
+export interface IFeedOutputDTO {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: string;
+  userId: string;
+  userName: string;
+}
+export interface IInputFollowDTODB {
+  id: string;
+  followed_id: string;
+  followed_name: string;
+  follower_id: string;
+  follower_name: string;
+}

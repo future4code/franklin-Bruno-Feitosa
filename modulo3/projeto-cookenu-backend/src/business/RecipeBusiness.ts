@@ -2,12 +2,13 @@ import { RecipeDatabase } from "../database/RecipeDatabase";
 import { UserDatabase } from "../database/UserDatabase";
 import { ICreateRecipeInputDTO, Recipe } from "../models/Recipe";
 import { Authenticator, ITokenPayload } from "../services/Authenticator";
+import { IdGenerator } from "../services/IdGenerator";
 
 export class RecipeBusiness {
   constructor(
     protected RecipeDatabase: RecipeDatabase,
     protected Authenticator: Authenticator,
-    protected UserDatabase: UserDatabase
+    protected IdGenerator: IdGenerator
   ) {}
 
   public createRecipe = async (input: ICreateRecipeInputDTO, token: string) => {
@@ -27,21 +28,39 @@ export class RecipeBusiness {
       throw new Error("Token não informado");
     }
 
+    const id: string = await this.IdGenerator.generate();
+
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
       throw new Error("Token inválido");
     }
 
-    const user = await this.UserDatabase.getUserById(tokenInfo.id);
+    const user = await this.RecipeDatabase.getUserById(tokenInfo.id);
 
     const recipe = new Recipe(title, description, step_by_step);
 
-    await this.RecipeDatabase.createRecipe(recipe, user.id, user.name);
+    await this.RecipeDatabase.createRecipeDB(id, recipe, user.id, user.name);
 
     const response = {
       message: "Receita criada com sucesso",
     };
+
+    return response;
+  };
+
+  public getRecipe = async (id: string, token: string) => {
+    if (!token) {
+      throw new Error("Token não informado");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Token inválido");
+    }
+
+    const response = await this.RecipeDatabase.getRecipeById(id);
 
     return response;
   };

@@ -2,8 +2,14 @@ import { response } from "express";
 import { UserDatabase } from "../database/UserDatabase";
 import {
   GetInfoOutputDTO,
+  IFeedOutputDTO,
+  IFollowInputDTO,
+  IFollowOutputDTO,
+  IGetInfoInputDTO,
+  IInputFollowDTODB,
   ILoginInputDTO,
   ISignupInputDTO,
+  IUnfollowInputDTO,
   User,
   USER_ROLES,
 } from "../models/User";
@@ -159,7 +165,10 @@ export class UserBusiness {
     return response;
   };
 
-  public getInfoById = async (token: string, id: string) => {
+  public getInfoById = async (input: IGetInfoInputDTO) => {
+    const id = input.id;
+    const token = input.token;
+
     if (!id) {
       throw new Error("Id não informado");
     }
@@ -184,6 +193,137 @@ export class UserBusiness {
       id: user.id,
       name: user.name,
       email: user.email,
+    };
+
+    return response;
+  };
+
+  public follow = async (input: IFollowInputDTO) => {
+    const idToFollow = input.idToFollow;
+    const token = input.token;
+
+    if (!idToFollow) {
+      throw new Error("Id não informado");
+    }
+
+    if (!token) {
+      throw new Error("Token não informado");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Token inválido");
+    }
+
+    const user = await this.UserDatabase.getUserById(tokenInfo.id);
+
+    const userToFollow = await this.UserDatabase.getUserById(idToFollow);
+
+    const followRelation = await this.UserDatabase.getFollowRelationById(
+      idToFollow
+    );
+
+    if (followRelation && tokenInfo.id === followRelation.follower_id) {
+      throw new Error("Você já seguiu essa pessoa");
+    }
+
+    if (user.name === userToFollow.name) {
+      throw new Error("Você não pode se seguir");
+    }
+
+    const id = await this.IdGenerator.generate();
+
+    const inputFollowDB: IInputFollowDTODB = {
+      id,
+      followed_id: userToFollow.id,
+      followed_name: userToFollow.name,
+      follower_id: user.id,
+      follower_name: user.name,
+    };
+
+    await this.UserDatabase.followUserDB(inputFollowDB);
+
+    const response: IFollowOutputDTO = {
+      message: "Seguido com sucesso",
+    };
+
+    return response;
+  };
+
+  public unfollow = async (input: IUnfollowInputDTO) => {
+    const idToUnfollow = input.idToUnfollow;
+    const token = input.token;
+
+    if (!idToUnfollow) {
+      throw new Error("Id não informado");
+    }
+
+    if (!token) {
+      throw new Error("Token não informado");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Token inválido");
+    }
+
+    const user = await this.UserDatabase.getUserById(tokenInfo.id);
+
+    const userToFollow = await this.UserDatabase.getUserById(idToUnfollow);
+
+    const followRelation = await this.UserDatabase.getFollowRelationById(
+      idToUnfollow
+    );
+
+    if (followRelation && !(tokenInfo.id === followRelation.follower_id)) {
+      throw new Error("Você não seguiu essa pessoa");
+    }
+
+    if (user.name === userToFollow.name) {
+      throw new Error("Você não pode parar de se seguir");
+    }
+
+    await this.UserDatabase.unfollowUserDB(followRelation.id);
+
+    const response: IFollowOutputDTO = {
+      message: "Deixou de seguir com sucesso",
+    };
+
+    return response;
+  };
+
+  public feed = async (token: string) => {
+    if (!token) {
+      throw new Error("Token não informado");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Token inválido");
+    }
+
+    const user = await this.UserDatabase.getUserById(tokenInfo.id);
+
+    const feeds = await this.UserDatabase.feedDB(user.id);
+
+    const feedList = feeds.map((feed) => {
+      const output: IFeedOutputDTO = {
+        id: feed.id,
+        title: feed.title,
+        description: feed.description,
+        createdAt: feed.creation_date,
+        userId: feed.user_id,
+        userName: feed.user_name,
+      };
+
+      return output;
+    });
+
+    const response = {
+      recipes: feedList,
     };
 
     return response;

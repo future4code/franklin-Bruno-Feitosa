@@ -1,0 +1,49 @@
+# @name signup
+
+POST http://localhost:3003/user/signup
+Content-Type: application/json
+
+{
+   "name": "Bruno Britto", 
+   "nickname": "Apollyon", 
+   "email": "apollyon@email.com" ,
+   "password": "apollyon",
+   "role": "admin"
+}
+
+###
+
+# @name login
+POST http://localhost:3003/user/login
+Content-Type: application/json
+
+{
+   "email": "apollyon@email.com" ,
+   "password": "apollyon"
+}
+
+
+###
+
+@token = {{login.response.body.token}}
+
+PUT http://localhost:3003/user/edit
+Authorization: {{token}}
+Content-Type: application/json
+
+{
+   "name": "Bruno Britto" 
+}
+
+###
+GET http://localhost:3003/user/profile
+Authorization: {{token}}
+
+###
+@id = 9a9fb23f-4212-46da-8d93-8b60994f52f3
+DELETE  http://localhost:3003/user/{{id}}
+Authorization: {{token}}
+
+###
+GET http://localhost:3003/user
+Authorization: {{token}}

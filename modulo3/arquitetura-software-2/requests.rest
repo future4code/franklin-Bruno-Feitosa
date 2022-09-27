@@ -1,0 +1,41 @@
+### Endpoint de teste
+GET http://localhost:3003/ping
+
+### 1) Signup
+POST http://localhost:3003/users/signup
+Content-Type: application/json
+
+{
+    "name": "Beltrano",
+    "email": "beltrano2@gmail.com",
+    "password": "abc123"
+}
+
+### 2) Login
+# @name login
+POST http://localhost:3003/users/login
+Content-Type: application/json
+
+{
+    "email": "astrodev@gmail.com",
+    "password": "bananinha"
+}
+
+### 3) Get users
+GET http://localhost:3003/users
+Authorization: {{login.response.body.token}}
+
+### 3) Delete user
+@id = 6d3b6b8b-1ec1-413b-8fea-8e34f33ba782
+DELETE http://localhost:3003/users/{{id}}
+Authorization: {{login.response.body.token}}
+
+### 4) Edit user
+@id = 6d3b6b8b-1ec1-413b-8fea-8e34f33ba782
+PUT http://localhost:3003/users/{{id}}
+Authorization: {{login.response.body.token}}
+Content-Type: application/json
+
+{
+    "name": "Beltrano 2"
+}

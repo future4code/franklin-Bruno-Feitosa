@@ -1,6 +1,11 @@
 import { RecipeDatabase } from "../database/RecipeDatabase";
-import { UserDatabase } from "../database/UserDatabase";
-import { ICreateRecipeInputDTO, Recipe } from "../models/Recipe";
+import {
+  ICreateRecipeInputDTO,
+  IDeleteRecipeInputDTO,
+  IEditRecipeInputDTO,
+  Recipe,
+} from "../models/Recipe";
+import { USER_ROLES } from "../models/User";
 import { Authenticator, ITokenPayload } from "../services/Authenticator";
 import { IdGenerator } from "../services/IdGenerator";
 
@@ -61,6 +66,69 @@ export class RecipeBusiness {
     }
 
     const response = await this.RecipeDatabase.getRecipeById(id);
+
+    return response;
+  };
+
+  public editRecipe = async (input: IEditRecipeInputDTO) => {
+    const token = input.token;
+    const id = input.id;
+    const body = input.body;
+
+    if (!token) {
+      throw new Error("Token não informado");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Token inválido");
+    }
+
+    const recipe = await this.RecipeDatabase.getRecipeById(id);
+
+    if (tokenInfo.id !== recipe.user_id && tokenInfo.role !== "ADMIN") {
+      throw new Error("Você não tem autorização para alterar essa receita");
+    }
+
+    await this.RecipeDatabase.editRecipeDB(body, id);
+
+    const response = {
+      message: "Receita atualizada com sucesso",
+    };
+
+    return response;
+  };
+
+  public deleteRecipe = async (input: IDeleteRecipeInputDTO) => {
+    const token = input.token;
+    const id = input.id;
+
+    if (!token) {
+      throw new Error("Token não informado");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Token inválido");
+    }
+
+    const recipe = await this.RecipeDatabase.getRecipeById(id);
+
+    if (!recipe) {
+      throw new Error("A receita não existe");
+    }
+
+    if (tokenInfo.id !== recipe.user_id && tokenInfo.role !== "ADMIN") {
+      throw new Error("Você não tem autorização para deletar essa receita");
+    }
+
+    await this.RecipeDatabase.deleteRecipeDB(id);
+
+    const response = {
+      message: "Receita deletada com sucesso",
+    };
 
     return response;
   };

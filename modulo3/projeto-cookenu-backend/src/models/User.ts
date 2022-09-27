@@ -35,10 +35,6 @@ export class User {
   };
 }
 
-// export interface ISignupInputDBDTO {
-
-// }
-
 export interface ISignupInputDTO {
   name: string;
   email: string;
@@ -83,10 +79,23 @@ export interface IFeedOutputDTO {
   userId: string;
   userName: string;
 }
+export interface IFeedOutputDTODB {
+  id: string;
+  title: string;
+  description: string;
+  creation_date: string;
+  userId: string;
+  userName: string;
+}
 export interface IInputFollowDTODB {
   id: string;
   followed_id: string;
   followed_name: string;
   follower_id: string;
   follower_name: string;
+}
+
+export interface IDeleteUserInputDTO {
+  token: string;
+  id: string;
 }

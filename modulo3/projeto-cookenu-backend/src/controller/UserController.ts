@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { UserBusiness } from "../business/UserBusiness";
 import {
+  IDeleteUserInputDTO,
   IFollowInputDTO,
   IGetInfoInputDTO,
   ILoginInputDTO,
@@ -104,7 +105,7 @@ export class UserController {
   public unfollow = async (req: Request, res: Response) => {
     try {
       const token = req.headers.authorization as string;
-      const idToUnfollow = req.body.idToUnFollow as string;
+      const idToUnfollow = req.body.idToUnfollow as string;
 
       const input: IUnfollowInputDTO = { token, idToUnfollow };
 
@@ -124,6 +125,26 @@ export class UserController {
       const token = req.headers.authorization as string;
 
       const response = await this.userBusiness.feed(token);
+
+      res.status(202).send(response);
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).send({ message: error.message });
+      }
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  };
+
+  public deleteUser = async (req: Request, res: Response) => {
+    try {
+      const token = req.headers.authorization as string;
+      const id = req.params.id as string;
+
+      const input: IDeleteUserInputDTO = {
+        token,
+        id,
+      };
+      const response = await this.userBusiness.deleteUser(input);
 
       res.status(202).send(response);
     } catch (error) {

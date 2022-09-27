@@ -1,6 +1,5 @@
 ### Signup
 # @name signup
-
 POST http://localhost:3003/user/signup
 Content-Type: application/json
 
@@ -16,8 +15,8 @@ POST http://localhost:3003/user/login
 Content-Type: application/json
 
 {
-    "email": "bruno@email.com",
-    "password": "123456"
+    "email": "astrodev@gmail.com",
+    "password": "bananinha"
 }
 
 ### Info
@@ -31,8 +30,14 @@ Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
 ### Info By Id
-@userId = f03017bb-2c08-4cdc-bb63-7fbd7cebe01f
-GET http://localhost:3003/user/{{userId}}
+@userInfoId = bb9b7ee8-ae4b-4bd1-9bd6-e7e21594399b
+GET http://localhost:3003/user/{{userInfoId}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+### Delete User
+@userToDeleteId = bb9b7ee8-ae4b-4bd1-9bd6-e7e21594399b
+DELETE http://localhost:3003/user/{{userToDeleteId}}
 Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
@@ -45,18 +50,36 @@ Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
 {
-    "title": "Hamburguer",
-    "description": "Hamburguer Podrão",
+    "title": "Pizza",
+    "description": "Pizza de Frango",
     "step_by_step":
-      "Pegue o pão, faça aqueles hamburgueres de supermercado e jogue tudo que tiver dentro da geladeira nele."
+      "Pegue a pizza, coloque molho de tomate, queijo e o frango."
 }
 
 ### Get Recipe
-@recipeId = b3eae06c-0741-4b85-83ab-75189cf5f3cb
-GET http://localhost:3003/recipe/{{recipeId}}
+@recipeInfoId = e03134e8-0b51-4561-bcca-13356850c763
+GET http://localhost:3003/recipe/{{recipeInfoId}}
 Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
+### Delete Recipe
+@recipeToDeleteId = 6d7f00ea-a454-4a01-bad9-6f57f25344bc
+DELETE http://localhost:3003/recipe/{{recipeToDeleteId}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+### Edit Recipe
+@recipeToEditId = 3bc68f84-4df8-4432-939f-2edf4a82c630
+PUT http://localhost:3003/recipe/{{recipeToEditId}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+{
+    "title": "Pizza com bastante queijo",
+    "description": "Pizza de quatro queijos",
+    "step_by_step":
+      "Pegue a massa, passe o molho de tomate, jogue os diferentes tipos de queijo e, caso queira, finalize com orégano..."
+}
 
 ### FOLLOW
 
@@ -66,13 +89,14 @@ Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
 {
-    "idToFollow": "2d406fc5-d020-4b60-a002-68e5d8aa911f"
+    "idToFollow": "bb9b7ee8-ae4b-4bd1-9bd6-e7e21594399b"
 }
+
 ### Unfollow User
 POST http://localhost:3003/user/unfollow
 Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
 {
-    "idToUnfollow": "7079b8e4-95cd-48aa-82a9-77454e94b789"
+    "idToUnfollow": "bb9b7ee8-ae4b-4bd1-9bd6-e7e21594399b"
 }

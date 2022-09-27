@@ -28,9 +28,10 @@ class Migrations extends BaseDatabase {
   createTables = async () => {
     await BaseDatabase.connection.raw(`
         DROP TABLE IF EXISTS ${RecipeDatabase.TABLE_RECIPES};
+        DROP TABLE IF EXISTS ${UserDatabase.TABLE_FOLLOWERS};
         DROP TABLE IF EXISTS ${UserDatabase.TABLE_USERS};
         
-        CREATE TABLE IF NOT EXISTS ${UserDatabase.TABLE_USERS}(
+        CREATE TABLE IF NOT EXISTS ${UserDatabase.TABLE_USERS} (
             id VARCHAR(255) PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL UNIQUE,
@@ -38,14 +39,25 @@ class Migrations extends BaseDatabase {
             role ENUM("NORMAL", "ADMIN") DEFAULT "NORMAL" NOT NULL
         );
         
-          CREATE TABLE Cookenu_Recipes(
-          title VARCHAR(255) NOT NULL,
-          description VARCHAR(255) NOT NULL,
-          step_by_step TEXT NOT NULL,
-          creation_date VARCHAR(255) NOT NULL,
-          user_id VARCHAR(255) NOT NULL,
-          user_name VARCHAR(255) NOT NULL
-          )
+        CREATE TABLE IF NOT EXISTS ${RecipeDatabase.TABLE_RECIPES} (
+            id VARCHAR(255) PRIMARY KEY,
+            title VARCHAR(255) NOT NULL,
+            description VARCHAR(255) NOT NULL,
+            step_by_step TEXT NOT NULL,
+            creation_date VARCHAR(255) NOT NULL,
+            user_id VARCHAR(255) NOT NULL,
+            user_name VARCHAR(255) NOT NULL
+        )
+
+        CREATE TABLE IF NOT EXISTS ${UserDatabase.TABLE_FOLLOWERS} (
+            id VARCHAR(255) PRIMARY KEY,
+            followed_id VARCHAR(255) NOT NULL,
+            followed_name VARCHAR(255) NOT NULL,
+            follower_id VARCHAR(255) NOT NULL,
+            follower_name VARCHAR(255) NOT NULL,
+            FOREIGN KEY (follower_id) REFERENCES Cookenu_Users(id),
+            FOREIGN KEY (followed_id) REFERENCES Cookenu_Users(id)
+        );
         `);
   };
 

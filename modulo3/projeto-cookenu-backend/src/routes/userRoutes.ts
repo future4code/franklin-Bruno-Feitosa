@@ -24,6 +24,4 @@ userRoutes.post("/unfollow", userController.unfollow);
 userRoutes.get("/profile", userController.getInfo);
 userRoutes.get("/feed", userController.feed);
 userRoutes.get("/:id", userController.getInfoById);
-// userRoutes.get("/", UserController.getUsers);
-// userRoutes.delete("/users/:id", UserController.deleteUser);
-// userRoutes.put("/users/:id", UserController.editUser);
+userRoutes.delete("/:id", userController.deleteUser);

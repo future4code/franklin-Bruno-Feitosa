@@ -23,14 +23,6 @@ export class Recipe {
   public getStepByStep = () => {
     return this.stepByStep;
   };
-
-  // public getCreationDate = () => {
-  //   return this.creationDate;
-  // };
-
-  // public getUserRecipe = () => {
-  //   return this.userRecipe;
-  // };
 }
 
 export interface ICreateRecipeInputDTO {
@@ -54,4 +46,14 @@ export interface GetRecipeOutputDTO {
   title: string;
   description: string;
   createdAt: string;
+}
+
+export interface IEditRecipeInputDTO {
+  token: string;
+  id: string;
+  body: ICreateRecipeInputDTO;
+}
+export interface IDeleteRecipeInputDTO {
+  token: string;
+  id: string;
 }

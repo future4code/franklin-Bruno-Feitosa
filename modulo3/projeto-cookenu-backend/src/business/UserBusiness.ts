@@ -1,7 +1,7 @@
-import { response } from "express";
 import { UserDatabase } from "../database/UserDatabase";
 import {
   GetInfoOutputDTO,
+  IDeleteUserInputDTO,
   IFeedOutputDTO,
   IFollowInputDTO,
   IFollowOutputDTO,
@@ -314,9 +314,9 @@ export class UserBusiness {
         id: feed.id,
         title: feed.title,
         description: feed.description,
-        createdAt: feed.creation_date,
-        userId: feed.user_id,
-        userName: feed.user_name,
+        createdAt: feed.createdAt,
+        userId: feed.userId,
+        userName: feed.userName,
       };
 
       return output;
@@ -324,6 +324,40 @@ export class UserBusiness {
 
     const response = {
       recipes: feedList,
+    };
+
+    return response;
+  };
+
+  public deleteUser = async (input: IDeleteUserInputDTO) => {
+    const token = input.token;
+    const id = input.id;
+
+    if (!token) {
+      throw new Error("Token não informado");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Token inválido");
+    }
+
+    if (tokenInfo.role !== "ADMIN") {
+      throw new Error("Você precisa ser administrador para deletar uma conta");
+    }
+
+    const user = await this.UserDatabase.getUserById(id);
+
+    if (!user) {
+      throw new Error("O usuário não existe");
+    }
+
+    await this.UserDatabase.deleteRecipeDB(id);
+    await this.UserDatabase.deleteUserDB(id);
+
+    const response = {
+      message: "Usuário deletada com sucesso",
     };
 
     return response;

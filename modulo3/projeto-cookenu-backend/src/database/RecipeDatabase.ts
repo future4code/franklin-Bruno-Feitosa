@@ -1,4 +1,4 @@
-import { IRecipesDB, Recipe } from "../models/Recipe";
+import { ICreateRecipeInputDTO, IRecipesDB, Recipe } from "../models/Recipe";
 import { IUserDB, User } from "../models/User";
 import { BaseDatabase } from "./BaseDatabase";
 
@@ -60,5 +60,22 @@ export class RecipeDatabase extends BaseDatabase {
       .where({ id });
 
     return result[0];
+  };
+
+  public editRecipeDB = async (
+    body: ICreateRecipeInputDTO,
+    id: string
+  ): Promise<void> => {
+    await BaseDatabase.connection(RecipeDatabase.TABLE_RECIPES)
+      .select("*")
+      .update(body)
+      .where({ id });
+  };
+
+  public deleteRecipeDB = async (id: string): Promise<void> => {
+    await BaseDatabase.connection(RecipeDatabase.TABLE_RECIPES)
+      .select("*")
+      .delete()
+      .where({ id });
   };
 }

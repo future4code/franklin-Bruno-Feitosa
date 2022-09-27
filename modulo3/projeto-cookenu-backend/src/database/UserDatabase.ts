@@ -1,3 +1,4 @@
+import { IRecipesDB } from "../models/Recipe";
 import { IInputFollowDTODB, IUserDB, User } from "../models/User";
 import { BaseDatabase } from "./BaseDatabase";
 
@@ -37,7 +38,7 @@ export class UserDatabase extends BaseDatabase {
     const result: IUserDB[] = await BaseDatabase.connection(
       UserDatabase.TABLE_USERS
     )
-      .select("*")
+      .select("id", "name", "email")
       .where({ id });
 
     return result[0];
@@ -73,9 +74,40 @@ export class UserDatabase extends BaseDatabase {
         "=",
         `${UserDatabase.TABLE_RECIPES}.user_id`
       )
-      .select("*")
+      .select(
+        `${UserDatabase.TABLE_RECIPES}.id`,
+        "title",
+        "description",
+        "creation_date as createdAt",
+        `${UserDatabase.TABLE_USERS}.id as userId`,
+        "user_name as userName"
+      )
       .where(`${UserDatabase.TABLE_USERS}.id`, `${id}`);
 
     return result;
+  };
+
+  public deleteUserDB = async (id: string): Promise<void> => {
+    await BaseDatabase.connection(UserDatabase.TABLE_USERS)
+      .select("*")
+      .delete()
+      .where({ id });
+  };
+
+  public getRecipeById = async (id: string): Promise<IRecipesDB> => {
+    const result: IRecipesDB[] = await BaseDatabase.connection(
+      UserDatabase.TABLE_RECIPES
+    )
+      .select("*")
+      .where({ id });
+
+    return result[0];
+  };
+
+  public deleteRecipeDB = async (id: string): Promise<void> => {
+    await BaseDatabase.connection(UserDatabase.TABLE_RECIPES)
+      .select("*")
+      .delete()
+      .where("user_id", id);
   };
 }

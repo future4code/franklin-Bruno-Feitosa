@@ -1,0 +1,15 @@
+### Create Payment
+# @name createPayment
+POST http://localhost:3003/payment/create
+Content-Type: application/json
+
+{
+    "amount": 200,
+    "type": "CREDIT_CARD",
+    "card": {
+        "cardHolderName": "Bruno Britto",
+        "cardNumber": "XXXX-XXXX-XXXX-XXXX",
+        "cardExpirationDate": "05/32",
+        "cardCVV": 333
+    }
+}

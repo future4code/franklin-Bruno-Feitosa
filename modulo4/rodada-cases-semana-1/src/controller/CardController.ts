@@ -1,24 +1,26 @@
 import { Request, Response } from "express";
-import { PaymentBusiness } from "../business/PaymentBusiness";
+import { CardBusiness } from "../business/CardBusiness";
 import {
-  IPaymentInputDTO,
-  IPaymentStatusInputDTO,
-  PAYMENT_TYPE,
-} from "../models/Payment";
+  ICardInputDTO,
+  IDeleteCardInputDTO,
+  IGetSingleCardInputDTO,
+} from "../models/Card";
 
-export class PaymentController {
-  constructor(protected PaymentBusiness: PaymentBusiness) {}
+export class CardController {
+  constructor(protected CardBusiness: CardBusiness) {}
 
-  public createPayment = async (req: Request, res: Response) => {
+  public registerCard = async (req: Request, res: Response) => {
     try {
       const token = req.headers.authorization as string;
-      const input: IPaymentInputDTO = {
-        amount: Number(req.body.amount),
-        type: req.body.type,
-        cardNumber: req.body.cardNumber as string,
+
+      const input: ICardInputDTO = {
+        cardHolderName: req.body.cardHolderName,
+        cardNumber: req.body.cardNumber,
+        cardExpirationDate: req.body.cardExpirationDate,
+        cardCVV: req.body.cardCVV,
       };
 
-      const response = await this.PaymentBusiness.createPayment(input, token);
+      const response = await this.CardBusiness.registerCard(input, token);
 
       res.status(201).send(response);
     } catch (error) {
@@ -29,11 +31,11 @@ export class PaymentController {
     }
   };
 
-  public allPayments = async (req: Request, res: Response) => {
+  public allCards = async (req: Request, res: Response) => {
     try {
       const token = req.headers.authorization as string;
 
-      const response = await this.PaymentBusiness.allPayments(token);
+      const response = await this.CardBusiness.allCards(token);
 
       res.status(201).send(response);
     } catch (error) {
@@ -44,17 +46,17 @@ export class PaymentController {
     }
   };
 
-  public checkPaymentStatus = async (req: Request, res: Response) => {
+  public singleCard = async (req: Request, res: Response) => {
     try {
+      const cardNumber = req.params.cardNumber as string;
       const token = req.headers.authorization as string;
-      const paymentId = req.params.paymentId as string;
 
-      const input: IPaymentStatusInputDTO = {
-        paymentId,
+      const input: IGetSingleCardInputDTO = {
+        cardNumber,
         token,
       };
 
-      const response = await this.PaymentBusiness.checkPaymentStatus(input);
+      const response = await this.CardBusiness.getSingleCard(input);
 
       res.status(201).send(response);
     } catch (error) {
@@ -65,17 +67,17 @@ export class PaymentController {
     }
   };
 
-  public deletePayment = async (req: Request, res: Response) => {
+  public deleteCard = async (req: Request, res: Response) => {
     try {
+      const cardNumber = req.params.cardNumber as string;
       const token = req.headers.authorization as string;
-      const paymentId = req.params.paymentId as string;
 
-      const input: IPaymentStatusInputDTO = {
-        paymentId,
+      const input: IDeleteCardInputDTO = {
+        cardNumber,
         token,
       };
 
-      const response = await this.PaymentBusiness.deletePayment(input);
+      const response = await this.CardBusiness.deleteCard(input);
 
       res.status(201).send(response);
     } catch (error) {

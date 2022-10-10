@@ -1,15 +1,90 @@
+## Buyer
+### Create Buyer
+# @name createBuyer
+POST http://localhost:3003/buyer/create
+Content-Type: application/json
+
+{
+    "name": "Germana Marinho",
+    "email": "germana@email.com",
+    "password": "123456",
+    "cpf": "10987654321"
+}
+
+### Login
+# @name login
+POST http://localhost:3003/buyer/login
+Content-Type: application/json
+
+{
+    "email": "bruno@email.com",
+    "password": "123456"
+}
+
+## Card
+### Create Card
+# @name createCard
+POST http://localhost:3003/card/create
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+{
+    "cardNumber": "372795086309759",
+    "cardHolderName": "Bruno Britto",
+    "cardExpirationDate": "05/33",
+    "cardCVV": 333
+}
+
+### Delete Card
+# @name deleteCard
+@cardNumberToDelete = 2720499880582126
+DELETE http://localhost:3003/card/{{cardNumberToDelete}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+### Get All Cards
+# @name getAllCards
+GET  http://localhost:3003/card/all
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+### Card By Card Number
+# @name getSingleCard
+@cardNumber = 2720499880582126
+GET http://localhost:3003/card/{{cardNumber}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+## Payment
 ### Create Payment
 # @name createPayment
 POST http://localhost:3003/payment/create
 Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
 
 {
     "amount": 200,
     "type": "CREDIT_CARD",
-    "card": {
-        "cardHolderName": "Bruno Britto",
-        "cardNumber": "XXXX-XXXX-XXXX-XXXX",
-        "cardExpirationDate": "05/32",
-        "cardCVV": 333
-    }
+    "cardNumber": "2720499880582126"
 }
+
+### Delete Payment
+# @name deletePayment
+@paymentIdToDelete = ebcb9863-4bd7-4911-8225-22b316ceacd8
+DELETE http://localhost:3003/payment/{{paymentIdToDelete}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+### getAllPayments
+# @name getAllPayments
+GET http://localhost:3003/payment/status
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+### Payment Status
+# @name paymentStatus
+@paymentId = ebcb9863-4bd7-4911-8225-22b316ceacd8
+GET http://localhost:3003/payment/status/{{paymentId}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+

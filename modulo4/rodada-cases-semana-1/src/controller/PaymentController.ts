@@ -15,7 +15,7 @@ export class PaymentController {
       const input: IPaymentInputDTO = {
         amount: Number(req.body.amount),
         type: req.body.type,
-        cardNumber: req.body.cardNumber as string,
+        cardNumber: (req.body.cardNumber as string) || undefined,
       };
 
       const response = await this.PaymentBusiness.createPayment(input, token);
@@ -44,7 +44,7 @@ export class PaymentController {
     }
   };
 
-  public checkPaymentStatus = async (req: Request, res: Response) => {
+  public singlePaymentStatus = async (req: Request, res: Response) => {
     try {
       const token = req.headers.authorization as string;
       const paymentId = req.params.paymentId as string;
@@ -54,7 +54,7 @@ export class PaymentController {
         token,
       };
 
-      const response = await this.PaymentBusiness.checkPaymentStatus(input);
+      const response = await this.PaymentBusiness.singlePaymentStatus(input);
 
       res.status(201).send(response);
     } catch (error) {

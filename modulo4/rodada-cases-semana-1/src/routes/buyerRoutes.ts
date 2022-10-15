@@ -17,11 +17,8 @@ const buyerController = new BuyerController(
   )
 );
 
-buyerRoutes.post("/card", buyerController.registerCard);
 buyerRoutes.post("/create", buyerController.createBuyer);
 buyerRoutes.post("/login", buyerController.login);
-// buyerRoutes.get("/:id", buyerController.getbuyer);
-// buyerRoutes.put("/:id", buyerController.editbuyer);
-// buyerRoutes.delete("/:id", buyerController.deletebuyer);
-// userRoutes.get("/", UserController.getUsers);
-// userRoutes.put("/users/:id", UserController.editUser);
+buyerRoutes.get("/", buyerController.buyerInfo);
+buyerRoutes.get("/:buyerId", buyerController.buyerInfoById);
+buyerRoutes.delete("/:buyerId", buyerController.deleteBuyer);

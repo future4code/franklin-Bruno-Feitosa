@@ -1,5 +1,6 @@
 import { ICreateBuyerInputDTODB, IGetBuyerOutputDTODB } from "../models/Buyer";
 import { ICardInputDTODB, ICardOutputDTODB } from "../models/Card";
+import { IPaymentStatusOutputDTODB } from "../models/Payment";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class BuyerDatabase extends BaseDatabase {
@@ -17,18 +18,6 @@ export class BuyerDatabase extends BaseDatabase {
     };
 
     return buyerDb;
-  };
-  public toCardDBModel = (cardInputDB: ICardInputDTODB) => {
-    const cardDb = {
-      card_number: cardInputDB.card.getCardNumber(),
-      card_holder_name: cardInputDB.card.getCardHolderName(),
-      card_expiration_date: cardInputDB.card.getCardExpirationDate(),
-      card_cvv: cardInputDB.card.getCardCVV(),
-      card_issuer: cardInputDB.card.getCardIssuer(),
-      buyer_id: cardInputDB.buyer_id,
-    };
-
-    return cardDb;
   };
 
   public createBuyerDB = async (
@@ -80,6 +69,7 @@ export class BuyerDatabase extends BaseDatabase {
 
     return result[0];
   };
+
   public getBuyerById = async (
     buyerId: string
   ): Promise<IGetBuyerOutputDTODB> => {
@@ -96,6 +86,14 @@ export class BuyerDatabase extends BaseDatabase {
       .where("buyer_id", buyerId);
 
     return result[0];
+  };
+
+  public getAllBuyers = async (): Promise<IGetBuyerOutputDTODB[]> => {
+    const result: IGetBuyerOutputDTODB[] = await BaseDatabase.connection(
+      BuyerDatabase.TABLE_BUYER
+    ).select("buyer_id as buyerId", "buyer_name as buyerName");
+
+    return result;
   };
 
   public getCardByBuyerId = async (
@@ -119,8 +117,55 @@ export class BuyerDatabase extends BaseDatabase {
     return result[0];
   };
 
-  public createCardDB = async (cardInputDB: ICardInputDTODB): Promise<void> => {
-    const cardDb = this.toCardDBModel(cardInputDB);
-    await BaseDatabase.connection(BuyerDatabase.TABLE_CARD).insert(cardDb);
+  public getPaymentsByBuyerId = async (
+    buyerId: string
+  ): Promise<IPaymentStatusOutputDTODB[]> => {
+    const result = await BaseDatabase.connection(BuyerDatabase.TABLE_PAYMENT)
+      .select(
+        "payment_id as paymentId",
+        "buyer_id as buyerId",
+        "amount",
+        "type",
+        "status",
+        "payment_date as paymentDate"
+      )
+      .where(`${BuyerDatabase.TABLE_PAYMENT}.buyer_id`, buyerId);
+
+    return result;
+  };
+
+  public getCardsByBuyerId = async (
+    buyerId: string
+  ): Promise<IPaymentStatusOutputDTODB[]> => {
+    const result = await BaseDatabase.connection(BuyerDatabase.TABLE_CARD)
+      .select(
+        "card_number as cardNumber",
+        "card_holder_name as cardHolderName",
+        "card_expiration_date as cardExpirationDate",
+        "card_CVV as cardCVV",
+        "card_issuer as cardIssuer",
+        "buyer_id as buyerId"
+      )
+      .where(`${BuyerDatabase.TABLE_CARD}.buyer_id`, buyerId);
+
+    return result;
+  };
+
+  public deleteBuyerDB = async (buyerId: string): Promise<void> => {
+    await BaseDatabase.connection(BuyerDatabase.TABLE_BUYER)
+      .delete()
+      .where("buyer_id", buyerId);
+  };
+
+  public deleteCardDB = async (buyerId: string): Promise<void> => {
+    await BaseDatabase.connection(BuyerDatabase.TABLE_CARD)
+      .delete()
+      .where("buyer_id", buyerId);
+  };
+
+  public deletePaymentDB = async (buyerId: string): Promise<void> => {
+    await BaseDatabase.connection(BuyerDatabase.TABLE_PAYMENT)
+      .delete()
+      .where("buyer_id", buyerId);
   };
 }

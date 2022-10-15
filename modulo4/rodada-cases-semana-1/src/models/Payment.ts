@@ -64,7 +64,7 @@ export class Payment {
 export interface IPaymentInputDTO {
   amount: number;
   type: PAYMENT_TYPE;
-  cardNumber: string;
+  cardNumber: string | undefined;
 }
 
 export interface IPaymentInputDTODB {

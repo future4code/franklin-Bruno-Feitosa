@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
 import { BuyerBusiness } from "../business/BuyerBusiness";
-import { ICreateBuyerInputDTO, ILoginInputDTO } from "../models/Buyer";
+import {
+  IBuyersInfoInputDTO,
+  ICreateBuyerInputDTO,
+  ILoginInputDTO,
+} from "../models/Buyer";
 import { ICardInputDTO } from "../models/Card";
 
 export class BuyerController {
@@ -44,20 +48,52 @@ export class BuyerController {
     }
   };
 
-  public registerCard = async (req: Request, res: Response) => {
+  public buyerInfo = async (req: Request, res: Response) => {
     try {
       const token = req.headers.authorization as string;
+      const response = await this.BuyerBusiness.buyerInfo(token);
 
-      const input: ICardInputDTO = {
-        cardHolderName: req.body.cardHolderName,
-        cardNumber: req.body.cardNumber,
-        cardExpirationDate: req.body.cardExpirationDate,
-        cardCVV: req.body.cardCVV,
+      res.status(201).send(response);
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).send({ message: error.message });
+      }
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  };
+
+  public buyerInfoById = async (req: Request, res: Response) => {
+    try {
+      const token = req.headers.authorization as string;
+      const buyerId = req.params.buyerId as string;
+
+      const input: IBuyersInfoInputDTO = {
+        buyerId,
+        token,
       };
+      const response = await this.BuyerBusiness.buyerInfoById(input);
 
-      // const response = await this.BuyerBusiness.registerCard(input, token);
+      res.status(201).send(response);
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).send({ message: error.message });
+      }
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  };
 
-      // res.status(201).send(response);
+  public deleteBuyer = async (req: Request, res: Response) => {
+    try {
+      const token = req.headers.authorization as string;
+      const buyerId = req.params.buyerId as string;
+
+      const input: IBuyersInfoInputDTO = {
+        buyerId,
+        token,
+      };
+      const response = await this.BuyerBusiness.deleteBuyer(input);
+
+      res.status(201).send(response);
     } catch (error) {
       if (error instanceof Error) {
         res.status(400).send({ message: error.message });

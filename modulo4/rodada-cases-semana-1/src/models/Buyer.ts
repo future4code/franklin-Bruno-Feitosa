@@ -34,6 +34,10 @@ export interface ICreateBuyerInputDTODB {
   buyerId: string;
   buyer: Buyer;
 }
+export interface IBuyersInfoInputDTO {
+  buyerId: string;
+  token: string;
+}
 export interface ILoginInputDTO {
   email: string;
   password: string;

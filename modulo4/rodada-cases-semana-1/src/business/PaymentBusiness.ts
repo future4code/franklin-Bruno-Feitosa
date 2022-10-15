@@ -4,7 +4,6 @@ import {
   IPaymentInputDTO,
   IPaymentInputDTODB,
   IPaymentStatusInputDTO,
-  IPaymentStatusOutputDTODB,
   Payment,
   PAYMENT_STATUS,
   PAYMENT_TYPE,
@@ -23,31 +22,32 @@ export class PaymentBusiness {
     const amount = input.amount;
     const type = input.type;
     const cardNumber = input.cardNumber;
-    let response: Object = { message: "" };
+    let response = { message: "" };
 
     if (!amount || !type) {
       throw new Error("Invalid Parameters");
     }
-    if (!cardNumber && type !== PAYMENT_TYPE.BOLETO) {
-      throw new Error("Invalid Card");
+
+    if (!token) {
+      throw new Error("Invalid Token");
     }
 
-    if (type === PAYMENT_TYPE.BOLETO) {
-      if (!token) {
-        throw new Error("Bad request");
-      }
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
-      const tokenInfo = await this.Authenticator.getTokenPayload(token);
+    if (!tokenInfo) {
+      throw new Error("Invalid Token");
+    }
 
-      if (!tokenInfo) {
-        throw new Error("Invalid Token");
-      }
+    const buyerInfo = await this.PaymentDatabase.getBuyerById(tokenInfo.id);
 
-      const buyerInfo = await this.PaymentDatabase.getBuyerById(tokenInfo.id);
+    if (!buyerInfo) {
+      throw new Error("User not found");
+    }
 
-      const paymentId: string = this.IdGenerator.generate();
-      const paymentDate: Date = new Date();
+    const paymentId: string = this.IdGenerator.generate();
+    const paymentDate: Date = new Date();
 
+    if (!cardNumber && type === PAYMENT_TYPE.BOLETO) {
       const payment = new Payment(
         amount,
         type,
@@ -74,24 +74,8 @@ export class PaymentBusiness {
       );
     }
 
-    if (type !== PAYMENT_TYPE.CREDIT_CARD) {
-      throw new Error("Invalid Payment Type");
-    }
-
-    if (!token) {
-      throw new Error("Bad request");
-    }
-
-    const tokenInfo = await this.Authenticator.getTokenPayload(token);
-
-    if (!tokenInfo) {
-      throw new Error("Unauthorized");
-    }
-
-    const buyerInfo = await this.PaymentDatabase.getBuyerById(tokenInfo.id);
-
-    if (!buyerInfo) {
-      throw new Error("User not found");
+    if (!cardNumber) {
+      throw new Error("Invalid Card");
     }
 
     const cardInfo = await this.PaymentDatabase.getCardByCardNumber(cardNumber);
@@ -100,16 +84,9 @@ export class PaymentBusiness {
       throw new Error("Invalid Card");
     }
 
-    // const checkIfPaymentExist = await this.PaymentDatabase.getPaymentByBuyerId(
-    //   buyerId
-    // );
-
-    // if (checkIfPaymentExist) {
-    //   throw new Error("Payment already been done");
-    // }
-
-    const paymentId: string = this.IdGenerator.generate();
-    const paymentDate = new Date();
+    if (buyerInfo.buyerId !== cardInfo.buyerId) {
+      throw new Error("Card not found");
+    }
 
     const payment = new Payment(
       amount,
@@ -137,7 +114,7 @@ export class PaymentBusiness {
 
   public allPayments = async (token: string) => {
     if (!token) {
-      throw new Error("Bad request");
+      throw new Error("Invalid Token");
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
@@ -155,24 +132,25 @@ export class PaymentBusiness {
         paymentId: payment.paymentId,
         paymentValue: payment.amount,
         paymentType: payment.type,
+        buyerId: payment.buyerId,
       };
     });
 
-    const response = paymentsList;
+    const response = { paymentsList: paymentsList };
 
     return response;
   };
 
-  public checkPaymentStatus = async (input: IPaymentStatusInputDTO) => {
-    const token = input.token;
+  public singlePaymentStatus = async (input: IPaymentStatusInputDTO) => {
     const paymentId = input.paymentId;
+    const token = input.token;
 
     if (!paymentId) {
       throw new Error("Missing parameter");
     }
 
     if (!token) {
-      throw new Error("Unauthorized");
+      throw new Error("Invalid Token");
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
@@ -204,7 +182,7 @@ export class PaymentBusiness {
     }
 
     if (!token) {
-      throw new Error("Unauthorized");
+      throw new Error("Invalid Token");
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
@@ -230,7 +208,7 @@ export class PaymentBusiness {
 
     await this.PaymentDatabase.deletePaymentDB(buyer.buyerId, paymentId);
 
-    const response = { message: "Payment deleted successfuly" };
+    const response = { message: "Payment deleted successfully" };
 
     return response;
   };

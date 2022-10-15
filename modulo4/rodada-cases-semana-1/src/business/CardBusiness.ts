@@ -25,6 +25,14 @@ export class CardBusiness {
     const cardExpirationDate = input.cardExpirationDate;
     const cardCVV = input.cardCVV;
 
+    if (!cardNumber || !cardHolderName || !cardExpirationDate || !cardCVV) {
+      throw new Error("Missing parameters");
+    }
+
+    if (String(cardCVV).length !== 3) {
+      throw new Error("Invalid CVV");
+    }
+
     if (!token) {
       throw new Error("Bad request");
     }
@@ -32,16 +40,22 @@ export class CardBusiness {
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Unauthorized");
+      throw new Error("Invalid Token");
     }
 
-    const isValidCard = this.LuhnCheckAlgorithm.luhnCheckAlgorithm(cardNumber);
+    const isValidCard = await this.LuhnCheckAlgorithm.luhnCheckAlgorithm(
+      cardNumber
+    );
 
-    if (!isValidCard) {
+    if (!isValidCard.checkValidCard) {
       throw new Error("Invalid Card");
     }
 
     const buyerInfo = await this.CardDatabase.getBuyerById(tokenInfo.id);
+
+    if (!buyerInfo) {
+      throw new Error("User not found");
+    }
 
     const cardExistForThisBuyer =
       await this.CardDatabase.getCardByBuyerIdCardNumber(
@@ -97,7 +111,7 @@ export class CardBusiness {
     const cardsList = cards.map((card) => {
       return {
         cardNumber: card.cardNumber,
-        cardName: card.cardHolderName,
+        cardHolderName: card.cardHolderName,
         cardIssuer: card.cardIssuer,
       };
     });
@@ -116,7 +130,7 @@ export class CardBusiness {
     }
 
     if (!token) {
-      throw new Error("Unauthorized");
+      throw new Error("Bad request");
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
@@ -125,16 +139,16 @@ export class CardBusiness {
       throw new Error("Invalid Token");
     }
 
-    const buyerCardNumber = await this.CardDatabase.getCardByBuyerIdCardNumber(
+    const buyerCard = await this.CardDatabase.getCardByBuyerIdCardNumber(
       tokenInfo.id,
       cardNumber
     );
 
-    if (!buyerCardNumber) {
+    if (!buyerCard) {
       throw new Error("Card not found");
     }
 
-    const response = { CardInfo: buyerCardNumber };
+    const response = { CardInfo: buyerCard };
 
     return response;
   };
@@ -148,7 +162,7 @@ export class CardBusiness {
     }
 
     if (!token) {
-      throw new Error("Unauthorized");
+      throw new Error("Bad request");
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
@@ -174,7 +188,7 @@ export class CardBusiness {
 
     await this.CardDatabase.deleteCardDB(buyerCardNumber.cardNumber);
 
-    const response = { message: "Card deleted successfuly" };
+    const response = { message: "Card deleted successfully" };
 
     return response;
   };

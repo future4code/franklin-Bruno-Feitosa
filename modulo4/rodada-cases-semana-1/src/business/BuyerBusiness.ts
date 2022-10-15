@@ -1,15 +1,14 @@
 import { BuyerDatabase } from "../database/BuyerDatabase";
 import {
   Buyer,
+  IBuyersInfoInputDTO,
   ICreateBuyerInputDTO,
   ICreateBuyerInputDTODB,
   ILoginInputDTO,
 } from "../models/Buyer";
-import { Card, ICardInputDTO, ICardInputDTODB } from "../models/Card";
 import { Authenticator, ITokenPayload } from "../services/Authenticator";
 import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
-import { LuhnCheckAlgorithm } from "../services/LuhnCheckAlgorithm";
 
 export class BuyerBusiness {
   constructor(
@@ -55,8 +54,12 @@ export class BuyerBusiness {
 
     const checkBuyerExists = await this.BuyerDatabase.getBuyerByEmail(email);
 
-    if (checkBuyerExists) {
+    if (!checkBuyerExists) {
       throw new Error("User already exists");
+    }
+
+    if (checkBuyerExists.cpf === cpf) {
+      throw new Error("Cpf already registered");
     }
 
     const buyerId = await this.IdGenerator.generate();
@@ -138,56 +141,107 @@ export class BuyerBusiness {
     return response;
   };
 
-  // public registerCard = async (input: ICardInputDTO, token: string) => {
-  //   const cardNumber = input.cardNumber;
-  //   const cardHolderName = input.cardHolderName;
-  //   const cardExpirationDate = input.cardExpirationDate;
-  //   const cardCVV = input.cardCVV;
+  public buyerInfo = async (token: string) => {
+    if (!token) {
+      throw new Error("Bad request");
+    }
 
-  //   if (!token) {
-  //     throw new Error("Bad request");
-  //   }
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
-  //   const tokenInfo = await this.Authenticator.getTokenPayload(token);
+    if (!tokenInfo) {
+      throw new Error("Unauthorized");
+    }
 
-  //   if (!tokenInfo) {
-  //     throw new Error("Unauthorized");
-  //   }
+    const buyerInfo = await this.BuyerDatabase.getAllBuyers();
 
-  //   const isValidCard = LuhnCheckAlgorithm(cardNumber);
+    if (!buyerInfo) {
+      throw new Error("User not found");
+    }
 
-  //   if (!isValidCard) {
-  //     throw new Error("Invalid Card");
-  //   }
+    const buyersList = buyerInfo.map((buyer) => {
+      return buyer;
+    });
 
-  //   const buyerInfo = await this.BuyerDatabase.getBuyerById(tokenInfo.id);
+    let response = { Buyers: buyersList };
 
-  //   const checkIfCardExist = await this.BuyerDatabase.getCardByBuyerId(
-  //     buyerInfo.buyerId,
-  //     cardNumber
-  //   );
+    return response;
+  };
 
-  //   if (checkIfCardExist) {
-  //     throw new Error("Card already registered");
-  //   }
+  public buyerInfoById = async (input: IBuyersInfoInputDTO) => {
+    const buyerId = input.buyerId;
+    const token = input.token;
 
-  //   const card = new Card(
-  //     cardNumber,
-  //     cardHolderName,
-  //     cardExpirationDate,
-  //     cardCVV,
-  //     isValidCard.creditCardIssuer
-  //   );
+    if (!buyerId) {
+      throw new Error("Invalid Parameter");
+    }
 
-  //   const cardInputDB: ICardInputDTODB = {
-  //     buyer_id: buyerInfo.buyerId,
-  //     card,
-  //   };
+    if (!token) {
+      throw new Error("Bad request");
+    }
 
-  //   await this.BuyerDatabase.createCardDB(cardInputDB);
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
-  //   let response = { message: "Card registered successfully" };
+    if (!tokenInfo) {
+      throw new Error("Unauthorized");
+    }
 
-  //   return response;
-  // };
+    const buyerInfo = await this.BuyerDatabase.getBuyerById(tokenInfo.id);
+
+    if (!buyerInfo) {
+      throw new Error("User not found");
+    }
+
+    let response = { BuyerInfo: buyerInfo };
+
+    return response;
+  };
+
+  public deleteBuyer = async (input: IBuyersInfoInputDTO) => {
+    const buyerId = input.buyerId;
+    const token = input.token;
+
+    if (!buyerId) {
+      throw new Error("Invalid Parameter");
+    }
+
+    if (!token) {
+      throw new Error("Bad request");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Unauthorized");
+    }
+
+    if (tokenInfo.id === buyerId) {
+      throw new Error("You can't delete your account");
+    }
+
+    const payments = await this.BuyerDatabase.getPaymentsByBuyerId(buyerId);
+
+    if (payments)
+      payments.forEach(async (payment) => {
+        await this.BuyerDatabase.deletePaymentDB(payment.buyerId);
+      });
+
+    const cards = await this.BuyerDatabase.getCardsByBuyerId(buyerId);
+
+    if (cards)
+      cards.forEach(async (card) => {
+        await this.BuyerDatabase.deleteCardDB(card.buyerId);
+      });
+
+    const buyerInfo = await this.BuyerDatabase.getBuyerById(buyerId);
+
+    if (!buyerInfo) {
+      throw new Error("User not found");
+    }
+
+    await this.BuyerDatabase.deleteBuyerDB(buyerId);
+
+    let response = { message: "User deleted successfully" };
+
+    return response;
+  };
 }

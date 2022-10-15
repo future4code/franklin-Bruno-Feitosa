@@ -21,6 +21,23 @@ Content-Type: application/json
     "password": "123456"
 }
 
+### Get Buyer
+GET http://localhost:3003/buyer
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+### Get Buyer by Id
+@buyerId = 0f2a2821-8a7c-4793-8d1a-790767b5219d
+GET http://localhost:3003/buyer/{{buyerId}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+### Delete Buyer
+@buyerId = 0f2a2821-8a7c-4793-8d1a-790767b5219d
+DELETE http://localhost:3003/buyer/{{buyerId}}
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
 ## Card
 ### Create Card
 # @name createCard
@@ -50,7 +67,7 @@ Authorization: {{login.response.body.accessToken}}
 
 ### Card By Card Number
 # @name getSingleCard
-@cardNumber = 2720499880582126
+@cardNumber = 5555666677778884
 GET http://localhost:3003/card/{{cardNumber}}
 Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
@@ -63,9 +80,9 @@ Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
 {
-    "amount": 200,
+    "amount": 500,
     "type": "CREDIT_CARD",
-    "cardNumber": "2720499880582126"
+    "cardNumber": "5555666677778884"
 }
 
 ### Delete Payment
@@ -82,7 +99,7 @@ Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
 ### Payment Status
-# @name paymentStatus
+# @name singlePayment
 @paymentId = ebcb9863-4bd7-4911-8225-22b316ceacd8
 GET http://localhost:3003/payment/status/{{paymentId}}
 Content-Type: application/json

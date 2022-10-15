@@ -8,17 +8,6 @@ export class CardDatabase extends BaseDatabase {
   public static TABLE_CARD = "Wirecard_Card";
   public static TABLE_BUYER = "Wirecard_Buyer";
 
-  public toBuyerDBModel = (buyerInputDB: ICreateBuyerInputDTODB) => {
-    const buyerDb = {
-      buyer_id: buyerInputDB.buyerId,
-      buyer_name: buyerInputDB.buyer.getName(),
-      password: buyerInputDB.buyer.getPassword(),
-      email: buyerInputDB.buyer.getEmail(),
-      cpf: buyerInputDB.buyer.getCpf(),
-    };
-
-    return buyerDb;
-  };
   public toCardDBModel = (cardInputDB: ICardInputDTODB) => {
     const cardDb = {
       card_number: cardInputDB.card.getCardNumber(),
@@ -30,13 +19,6 @@ export class CardDatabase extends BaseDatabase {
     };
 
     return cardDb;
-  };
-
-  public createBuyerDB = async (
-    buyerInputDB: ICreateBuyerInputDTODB
-  ): Promise<void> => {
-    const buyerDb = this.toBuyerDBModel(buyerInputDB);
-    await BaseDatabase.connection(CardDatabase.TABLE_BUYER).insert(buyerDb);
   };
 
   public getCardByCardNumber = async (
@@ -156,6 +138,6 @@ export class CardDatabase extends BaseDatabase {
   public deletePaymentDB = async (cardNumber: string): Promise<void> => {
     await BaseDatabase.connection(CardDatabase.TABLE_PAYMENT)
       .delete()
-      .where("card_number", cardNumber);
+      .where("buyer_id", cardNumber);
   };
 }

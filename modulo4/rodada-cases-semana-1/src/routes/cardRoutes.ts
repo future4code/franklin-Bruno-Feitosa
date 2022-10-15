@@ -20,9 +20,6 @@ const cardController = new CardController(
 );
 
 cardRoutes.post("/create", cardController.registerCard);
-cardRoutes.get("/:cardNumber", cardController.singleCard);
 cardRoutes.get("/all", cardController.allCards);
+cardRoutes.get("/:cardNumber", cardController.singleCard);
 cardRoutes.delete("/:cardNumber", cardController.deleteCard);
-// buyerRoutes.put("/:id", buyerController.editbuyer);
-// userRoutes.get("/", UserController.getUsers);
-// userRoutes.put("/users/:id", UserController.editUser);

@@ -17,8 +17,5 @@ const paymentController = new PaymentController(
 
 paymentRoutes.post("/create", paymentController.createPayment);
 paymentRoutes.get("/status", paymentController.allPayments);
-paymentRoutes.get("/status/:paymentId", paymentController.checkPaymentStatus);
+paymentRoutes.get("/status/:paymentId", paymentController.singlePaymentStatus);
 paymentRoutes.delete("/:paymentId", paymentController.deletePayment);
-// paymentRoutes.put("/:id", paymentController.editPayment);
-// userRoutes.get("/", UserController.getUsers);
-// userRoutes.put("/users/:id", UserController.editUser);

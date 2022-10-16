@@ -1,5 +1,22 @@
 ## Wirecard API Challenge
 
+### Project
+
+#### Technologies:
+
+- NodeJS + express
+- Typescript
+- DB: MySQL
+- DB Connection: Knex
+- Test: Jest
+
+#### Libs:
+
+- IDGenerate: uuid
+- HashManager: bcryptjs
+- Authenticate: JWT
+- CardIssuer: credit-card-type
+
 ### Run this project
 
 - To run this project you'll need to install the dependences and check the documentation below to use the requests.
@@ -22,5 +39,3 @@ In this architecture we divided our program in three tiers: business, controller
 #### Database
 
 - In database we do all the job behind the application, we interact directly with our database and return the result to the tier above (business).
-
-### and the design adopted to solve the challenges.

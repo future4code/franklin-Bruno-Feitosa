@@ -25,19 +25,19 @@ export class BuyerBusiness {
     const cpf = input.cpf;
 
     if (!name || !email || !password || !cpf) {
-      throw new Error("Invalid parameters");
+      throw new Error("Invalid Parameters");
     }
 
     if (typeof name !== "string" || name.length < 3) {
-      throw new Error("Invalid 'name' parameter");
+      throw new Error("Invalid 'name' Parameter");
     }
 
     if (typeof email !== "string" || email.length < 3) {
-      throw new Error("Invalid 'email' parameter");
+      throw new Error("Invalid 'email' Parameter");
     }
 
     if (typeof password !== "string" || password.length < 6) {
-      throw new Error("Invalid 'password' parameter");
+      throw new Error("Invalid 'password' Parameter");
     }
 
     if (
@@ -45,11 +45,11 @@ export class BuyerBusiness {
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       )
     ) {
-      throw new Error("Invalid 'email' parameter");
+      throw new Error("Invalid 'email' Parameter");
     }
 
     if (typeof cpf !== "string" || cpf.length !== 11) {
-      throw new Error("Invalid 'cpf' parameter");
+      throw new Error("Invalid 'cpf' Parameter");
     }
 
     const checkBuyerExists = await this.BuyerDatabase.getBuyerByEmail(email);
@@ -92,12 +92,16 @@ export class BuyerBusiness {
     const email = input.email;
     const password = input.password;
 
+    if (!email || !password) {
+      throw new Error("Invalid Parameters");
+    }
+
     if (typeof email !== "string" || email.length < 3) {
-      throw new Error("Invalid 'email' parameter");
+      throw new Error("Invalid 'email' Parameter");
     }
 
     if (typeof password !== "string" || password.length < 6) {
-      throw new Error("Invalid 'password' parameter");
+      throw new Error("Invalid 'password' Parameter");
     }
 
     if (
@@ -105,7 +109,7 @@ export class BuyerBusiness {
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       )
     ) {
-      throw new Error("Invalid 'email' parameter");
+      throw new Error("Invalid 'email' Parameter");
     }
 
     const buyer = await this.BuyerDatabase.getBuyerByEmail(email);
@@ -127,7 +131,7 @@ export class BuyerBusiness {
     );
 
     if (!comparedPassword) {
-      throw new Error("Invalid password");
+      throw new Error("Invalid Password");
     }
 
     const payload: ITokenPayload = {
@@ -143,13 +147,13 @@ export class BuyerBusiness {
 
   public buyerInfo = async (token: string) => {
     if (!token) {
-      throw new Error("Bad request");
+      throw new Error("Invalid Token");
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Unauthorized");
+      throw new Error("Invalid Token");
     }
 
     const buyerInfo = await this.BuyerDatabase.getAllBuyers();
@@ -176,13 +180,13 @@ export class BuyerBusiness {
     }
 
     if (!token) {
-      throw new Error("Bad request");
+      throw new Error("Invalid Token");
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Unauthorized");
+      throw new Error("Invalid Token");
     }
 
     const buyerInfo = await this.BuyerDatabase.getBuyerById(tokenInfo.id);
@@ -205,17 +209,17 @@ export class BuyerBusiness {
     }
 
     if (!token) {
-      throw new Error("Bad request");
+      throw new Error("Invalid Token");
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Unauthorized");
+      throw new Error("Invalid Token");
     }
 
     if (tokenInfo.id === buyerId) {
-      throw new Error("You can't delete your account");
+      throw new Error("You can't delete your own account");
     }
 
     const payments = await this.BuyerDatabase.getPaymentsByBuyerId(buyerId);

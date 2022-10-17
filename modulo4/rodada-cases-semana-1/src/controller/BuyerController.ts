@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { BuyerBusiness } from "../business/BuyerBusiness";
+import { ErrorHandler } from "../errors/ErrorHandler";
 import {
   IBuyersInfoInputDTO,
   ICreateBuyerInputDTO,
@@ -7,7 +8,6 @@ import {
   IEditUserPasswordInputDTO,
   ILoginInputDTO,
 } from "../models/Buyer";
-import { ICardInputDTO } from "../models/Card";
 
 export class BuyerController {
   constructor(protected BuyerBusiness: BuyerBusiness) {}
@@ -25,8 +25,8 @@ export class BuyerController {
 
       res.status(201).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -41,10 +41,10 @@ export class BuyerController {
 
       const response = await this.BuyerBusiness.login(input);
 
-      res.status(201).send(response);
+      res.status(200).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -55,10 +55,10 @@ export class BuyerController {
       const token = req.headers.authorization as string;
       const response = await this.BuyerBusiness.buyerInfo(token);
 
-      res.status(201).send(response);
+      res.status(200).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -75,10 +75,10 @@ export class BuyerController {
       };
       const response = await this.BuyerBusiness.buyerInfoById(input);
 
-      res.status(201).send(response);
+      res.status(200).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -99,8 +99,8 @@ export class BuyerController {
 
       res.status(202).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -121,8 +121,8 @@ export class BuyerController {
 
       res.status(202).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -139,10 +139,10 @@ export class BuyerController {
       };
       const response = await this.BuyerBusiness.deleteBuyer(input);
 
-      res.status(201).send(response);
+      res.status(200).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }

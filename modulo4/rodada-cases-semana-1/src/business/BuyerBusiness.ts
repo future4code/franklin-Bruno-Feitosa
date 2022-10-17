@@ -1,4 +1,5 @@
 import { BuyerDatabase } from "../database/BuyerDatabase";
+import { ErrorHandler } from "../errors/ErrorHandler";
 import {
   Buyer,
   IBuyersInfoInputDTO,
@@ -31,19 +32,19 @@ export class BuyerBusiness {
     const cpf = input.cpf;
 
     if (!name || !email || !password || !cpf) {
-      throw new Error("Invalid Parameters");
+      throw new ErrorHandler("Invalid Parameters", 400);
     }
 
     if (typeof name !== "string" || name.length < 3) {
-      throw new Error("Invalid 'name' Parameter");
+      throw new ErrorHandler("Invalid 'name' Parameter", 400);
     }
 
     if (typeof email !== "string" || email.length < 3) {
-      throw new Error("Invalid 'email' Parameter");
+      throw new ErrorHandler("Invalid 'email' Parameter", 400);
     }
 
     if (typeof password !== "string" || password.length < 6) {
-      throw new Error("Invalid 'password' Parameter");
+      throw new ErrorHandler("Invalid 'password' Parameter", 400);
     }
 
     if (
@@ -51,21 +52,21 @@ export class BuyerBusiness {
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       )
     ) {
-      throw new Error("Invalid 'email' Parameter");
+      throw new ErrorHandler("Invalid 'email' Parameter", 400);
     }
 
     if (typeof cpf !== "string" || cpf.length !== 11) {
-      throw new Error("Invalid 'cpf' Parameter");
+      throw new ErrorHandler("Invalid 'cpf' Parameter", 400);
     }
 
     const checkBuyerExists = await this.BuyerDatabase.getBuyerByEmail(email);
 
     if (!checkBuyerExists) {
-      throw new Error("User already exists");
+      throw new ErrorHandler("User already exists", 400);
     }
 
     if (checkBuyerExists.cpf === cpf) {
-      throw new Error("Cpf already registered");
+      throw new ErrorHandler("Cpf already registered", 400);
     }
 
     const buyerId = await this.IdGenerator.generate();
@@ -99,15 +100,15 @@ export class BuyerBusiness {
     const password = input.password;
 
     if (!email || !password) {
-      throw new Error("Invalid Parameters");
+      throw new ErrorHandler("Invalid Parameters", 400);
     }
 
     if (typeof email !== "string" || email.length < 3) {
-      throw new Error("Invalid 'email' Parameter");
+      throw new ErrorHandler("Invalid 'email' Parameter", 400);
     }
 
     if (typeof password !== "string" || password.length < 6) {
-      throw new Error("Invalid 'password' Parameter");
+      throw new ErrorHandler("Invalid 'password' Parameter", 400);
     }
 
     if (
@@ -115,13 +116,13 @@ export class BuyerBusiness {
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       )
     ) {
-      throw new Error("Invalid 'email' Parameter");
+      throw new ErrorHandler("Invalid 'email' Parameter", 400);
     }
 
     const buyer = await this.BuyerDatabase.getBuyerByEmail(email);
 
     if (!buyer) {
-      throw new Error("User not found");
+      throw new ErrorHandler("User not found", 404);
     }
 
     const buyerDb = new Buyer(
@@ -137,7 +138,7 @@ export class BuyerBusiness {
     );
 
     if (!comparedPassword) {
-      throw new Error("Invalid Password");
+      throw new ErrorHandler("Invalid Password", 401);
     }
 
     const payload: ITokenPayload = {
@@ -153,19 +154,19 @@ export class BuyerBusiness {
 
   public buyerInfo = async (token: string) => {
     if (!token) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const buyerInfo = await this.BuyerDatabase.getAllBuyers();
 
     if (!buyerInfo) {
-      throw new Error("User not found");
+      throw new ErrorHandler("User not found", 404);
     }
 
     const buyersList = buyerInfo.map((buyer) => {
@@ -181,24 +182,28 @@ export class BuyerBusiness {
     const buyerId = input.buyerId;
     const token = input.token;
 
-    if (!buyerId) {
-      throw new Error("Invalid Parameter");
+    if (!buyerId || buyerId.length === 0) {
+      throw new ErrorHandler("Invalid Parameter", 400);
     }
 
     if (!token) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
-    const buyerInfo = await this.BuyerDatabase.getBuyerById(tokenInfo.id);
+    if (buyerId !== tokenInfo.id) {
+      throw new ErrorHandler("Bad Request", 400);
+    }
+
+    const buyerInfo = await this.BuyerDatabase.getBuyerById(buyerId);
 
     if (!buyerInfo) {
-      throw new Error("User not found");
+      throw new ErrorHandler("User not found", 404);
     }
 
     let response = { BuyerInfo: buyerInfo };
@@ -213,19 +218,19 @@ export class BuyerBusiness {
     let checkIfPropertyExists: string = "";
 
     if (!token) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     if (!name && !email) {
-      throw new Error("Bad Request");
+      throw new ErrorHandler("Bad Request", 400);
     }
 
     if (typeof name !== "string" || (name.length < 3 && name)) {
-      throw new Error("Invalid 'name' Parameter");
+      throw new ErrorHandler("Invalid 'name' Parameter", 400);
     }
 
     if (typeof email !== "string" || (email.length < 3 && email)) {
-      throw new Error("Invalid 'email' Parameter");
+      throw new ErrorHandler("Invalid 'email' Parameter", 400);
     }
 
     if (
@@ -234,23 +239,26 @@ export class BuyerBusiness {
         /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
       )
     ) {
-      throw new Error("Invalid 'email' Parameter");
+      throw new ErrorHandler("Invalid 'email' Parameter", 400);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const buyer = await this.BuyerDatabase.getBuyerById(tokenInfo.id);
 
     if (!buyer) {
-      throw new Error("User not found");
+      throw new ErrorHandler("User not found", 404);
     }
 
     if (buyer.buyerName === name || buyer.email === email) {
-      throw new Error("The new field cannot be the same as the previous one");
+      throw new ErrorHandler(
+        "The new field cannot be the same as the previous one",
+        400
+      );
     }
 
     if (name && email) {
@@ -298,23 +306,23 @@ export class BuyerBusiness {
     const newPassword = input.newPassword;
 
     if (!token) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     if (!previousPassword || !newPassword) {
-      throw new Error("Bad Request");
+      throw new ErrorHandler("Bad Request", 400);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const buyer = await this.BuyerDatabase.getBuyerById(tokenInfo.id);
 
     if (!buyer) {
-      throw new Error("User not found");
+      throw new ErrorHandler("User not found", 404);
     }
 
     const comparedPasswords = await this.HashManager.compare(
@@ -323,18 +331,19 @@ export class BuyerBusiness {
     );
 
     if (!comparedPasswords) {
-      throw new Error("Invalid Password");
+      throw new ErrorHandler("Invalid Password", 401);
     }
 
     if (typeof newPassword !== "string" || newPassword.length < 6) {
-      throw new Error("Invalid 'password' Parameter");
+      throw new ErrorHandler("Invalid 'password' Parameter", 400);
     }
 
     const hashedPassword = await this.HashManager.hash(newPassword);
 
     if (hashedPassword === buyer.password) {
-      throw new Error(
-        "The new password cannot be the same as the previous one"
+      throw new ErrorHandler(
+        "The new password cannot be the same as the previous one",
+        400
       );
     }
 
@@ -354,21 +363,21 @@ export class BuyerBusiness {
     const token = input.token;
 
     if (!buyerId) {
-      throw new Error("Invalid Parameter");
+      throw new ErrorHandler("Invalid Parameter", 400);
     }
 
     if (!token) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     if (tokenInfo.id === buyerId) {
-      throw new Error("You can't delete your own account");
+      throw new ErrorHandler("You can't delete your own account", 403);
     }
 
     const payments = await this.BuyerDatabase.getPaymentsByBuyerId(buyerId);
@@ -388,7 +397,7 @@ export class BuyerBusiness {
     const buyerInfo = await this.BuyerDatabase.getBuyerById(buyerId);
 
     if (!buyerInfo) {
-      throw new Error("User not found");
+      throw new ErrorHandler("User not found", 404);
     }
 
     await this.BuyerDatabase.deleteBuyerDB(buyerId);

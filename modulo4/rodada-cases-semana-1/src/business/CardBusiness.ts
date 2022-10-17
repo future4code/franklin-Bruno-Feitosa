@@ -1,4 +1,5 @@
 import { CardDatabase } from "../database/CardDatabase";
+import { ErrorHandler } from "../errors/ErrorHandler";
 import {
   Card,
   ICardInputDTO,
@@ -26,21 +27,21 @@ export class CardBusiness {
     const cardCVV = input.cardCVV;
 
     if (!cardNumber || !cardHolderName || !cardExpirationDate || !cardCVV) {
-      throw new Error("Missing parameters");
+      throw new ErrorHandler("Missing parameters", 400);
     }
 
     if (String(cardCVV).length !== 3) {
-      throw new Error("Invalid CVV");
+      throw new ErrorHandler("Invalid CVV", 400);
     }
 
     if (!token) {
-      throw new Error("Bad request");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const isValidCard = await this.LuhnCheckAlgorithm.luhnCheckAlgorithm(
@@ -48,13 +49,13 @@ export class CardBusiness {
     );
 
     if (!isValidCard.checkValidCard) {
-      throw new Error("Invalid Card");
+      throw new ErrorHandler("Invalid Card", 406);
     }
 
     const buyerInfo = await this.CardDatabase.getBuyerById(tokenInfo.id);
 
     if (!buyerInfo) {
-      throw new Error("User not found");
+      throw new ErrorHandler("User not found", 404);
     }
 
     const cardExistForThisBuyer =
@@ -64,7 +65,7 @@ export class CardBusiness {
       );
 
     if (cardExistForThisBuyer) {
-      throw new Error("Card already registered");
+      throw new ErrorHandler("Card already registered", 400);
     }
 
     const cardNumberAlreadyExists = await this.CardDatabase.getCardByCardNumber(
@@ -72,7 +73,7 @@ export class CardBusiness {
     );
 
     if (cardNumberAlreadyExists) {
-      throw new Error("Card already registered by another user");
+      throw new ErrorHandler("Card already registered by another user", 400);
     }
 
     const card = new Card(
@@ -97,13 +98,13 @@ export class CardBusiness {
 
   public allCards = async (token: string) => {
     if (!token) {
-      throw new Error("Bad request");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const cards = await this.CardDatabase.getCardsByBuyerId(tokenInfo.id);
@@ -126,17 +127,17 @@ export class CardBusiness {
     const cardNumber = input.cardNumber;
 
     if (!cardNumber) {
-      throw new Error("Missing parameter");
+      throw new ErrorHandler("Missing parameter", 400);
     }
 
     if (!token) {
-      throw new Error("Bad request");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const buyerCard = await this.CardDatabase.getCardByBuyerIdCardNumber(
@@ -145,7 +146,7 @@ export class CardBusiness {
     );
 
     if (!buyerCard) {
-      throw new Error("Card not found");
+      throw new ErrorHandler("Card not found", 404);
     }
 
     const response = { CardInfo: buyerCard };
@@ -158,17 +159,17 @@ export class CardBusiness {
     const cardNumber = input.cardNumber;
 
     if (!cardNumber) {
-      throw new Error("Missing parameter");
+      throw new ErrorHandler("Missing parameter", 400);
     }
 
     if (!token) {
-      throw new Error("Bad request");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const buyerCardNumber = await this.CardDatabase.getCardByBuyerIdCardNumber(
@@ -177,7 +178,7 @@ export class CardBusiness {
     );
 
     if (!buyerCardNumber) {
-      throw new Error("Card not found");
+      throw new ErrorHandler("Card not found", 404);
     }
 
     const paymentWithCardNumber =

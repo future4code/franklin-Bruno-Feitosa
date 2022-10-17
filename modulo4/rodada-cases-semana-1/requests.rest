@@ -18,7 +18,7 @@ Content-Type: application/json
 
 {
     "email": "bruno@email.com",
-    "password": "1234567"
+    "password": "123456"
 }
 
 ### Get Buyer
@@ -27,7 +27,7 @@ Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 
 ### Get Buyer by Id
-@buyerId = 0f2a2821-8a7c-4793-8d1a-790767b5219d
+@buyerId = a4aa32a1-681f-4797-97e1-4d16c5d0909c
 GET http://localhost:3003/buyer/{{buyerId}}
 Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
@@ -53,8 +53,8 @@ Authorization: {{login.response.body.accessToken}}
 }
 
 ### Delete Buyer
-@buyerId = 0f2a2821-8a7c-4793-8d1a-790767b5219d
-DELETE http://localhost:3003/buyer/{{buyerId}}
+@buyerIdToDelete = 0f2a2821-8a7c-4793-8d1a-790767b5219d
+DELETE http://localhost:3003/buyer/{{buyerIdToDelete}}
 Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
 

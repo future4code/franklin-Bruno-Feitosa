@@ -528,7 +528,27 @@ describe("BuyerBusiness", () => {
         });
       });
 
+      test("Should return 'Bad Request'", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.buyerInfoById(input).catch((error) => {
+          expect(error.message).toBe("Bad Request");
+          done();
+        });
+      });
+
       test("Should return 'User not found'", (done) => {
+        Authenticator = jest.fn().mockImplementation(() => {
+          return {
+            getTokenPayload: jest.fn().mockResolvedValue({ id: "9876543210" }),
+          };
+        });
+
         BuyerDatabase = jest.fn().mockImplementation(() => {
           return {
             getBuyerById: jest.fn().mockResolvedValue(undefined),
@@ -549,6 +569,12 @@ describe("BuyerBusiness", () => {
       });
 
       test("Should return success", (done) => {
+        Authenticator = jest.fn().mockImplementation(() => {
+          return {
+            getTokenPayload: jest.fn().mockResolvedValue({ id: "9876543210" }),
+          };
+        });
+
         const buyerBusiness = new BuyerBusiness(
           new BuyerDatabase(),
           new HashManager(),

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { PaymentBusiness } from "../business/PaymentBusiness";
+import { ErrorHandler } from "../errors/ErrorHandler";
 import {
   IPaymentInputDTO,
   IPaymentStatusInputDTO,
@@ -22,8 +23,8 @@ export class PaymentController {
 
       res.status(201).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -37,8 +38,8 @@ export class PaymentController {
 
       res.status(201).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -58,8 +59,8 @@ export class PaymentController {
 
       res.status(201).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -79,8 +80,8 @@ export class PaymentController {
 
       res.status(201).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }

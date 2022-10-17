@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { CardBusiness } from "../business/CardBusiness";
+import { ErrorHandler } from "../errors/ErrorHandler";
 import {
   ICardInputDTO,
   IDeleteCardInputDTO,
@@ -24,8 +25,8 @@ export class CardController {
 
       res.status(201).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -39,8 +40,8 @@ export class CardController {
 
       res.status(201).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -60,8 +61,8 @@ export class CardController {
 
       res.status(201).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }
@@ -81,8 +82,8 @@ export class CardController {
 
       res.status(201).send(response);
     } catch (error) {
-      if (error instanceof Error) {
-        res.status(400).send({ message: error.message });
+      if (error instanceof ErrorHandler) {
+        res.status(error.errorCode).send({ message: error.message });
       }
       res.status(500).send({ message: "Internal Server Error" });
     }

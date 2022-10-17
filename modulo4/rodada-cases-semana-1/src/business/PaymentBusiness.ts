@@ -1,4 +1,5 @@
 import { PaymentDatabase } from "../database/PaymentDatabase";
+import { ErrorHandler } from "../errors/ErrorHandler";
 
 import {
   IPaymentInputDTO,
@@ -25,23 +26,23 @@ export class PaymentBusiness {
     let response = { message: "" };
 
     if (!amount || !type) {
-      throw new Error("Invalid Parameters");
+      throw new ErrorHandler("Invalid Parameters", 400);
     }
 
     if (!token) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const buyerInfo = await this.PaymentDatabase.getBuyerById(tokenInfo.id);
 
     if (!buyerInfo) {
-      throw new Error("User not found");
+      throw new ErrorHandler("User not found", 404);
     }
 
     const paymentId: string = this.IdGenerator.generate();
@@ -69,23 +70,24 @@ export class PaymentBusiness {
     }
 
     if (cardNumber && type !== PAYMENT_TYPE.CREDIT_CARD) {
-      throw new Error(
-        "Shouldn't put Card info if payment type isn't credit card"
+      throw new ErrorHandler(
+        "Shouldn't put Card info if payment type isn't credit card",
+        400
       );
     }
 
     if (!cardNumber) {
-      throw new Error("Invalid Card");
+      throw new ErrorHandler("Invalid Card", 400);
     }
 
     const cardInfo = await this.PaymentDatabase.getCardByCardNumber(cardNumber);
 
     if (!cardInfo) {
-      throw new Error("Invalid Card");
+      throw new ErrorHandler("Card not found", 404);
     }
 
     if (buyerInfo.buyerId !== cardInfo.buyerId) {
-      throw new Error("Card not found");
+      throw new ErrorHandler("Card not found", 404);
     }
 
     const payment = new Payment(
@@ -114,13 +116,13 @@ export class PaymentBusiness {
 
   public allPayments = async (token: string) => {
     if (!token) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const payments = await this.PaymentDatabase.getPaymentsByBuyerId(
@@ -146,17 +148,17 @@ export class PaymentBusiness {
     const token = input.token;
 
     if (!paymentId) {
-      throw new Error("Missing parameter");
+      throw new ErrorHandler("Missing parameter", 400);
     }
 
     if (!token) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const payment = await this.PaymentDatabase.getPaymentByPaymentId(
@@ -165,7 +167,7 @@ export class PaymentBusiness {
     );
 
     if (!payment) {
-      throw new Error("Payment didn't exist");
+      throw new ErrorHandler("Payment didn't exist", 404);
     }
 
     const response = { Payment: payment };
@@ -178,23 +180,23 @@ export class PaymentBusiness {
     const paymentId = input.paymentId;
 
     if (!paymentId) {
-      throw new Error("Missing parameter");
+      throw new ErrorHandler("Missing parameter", 400);
     }
 
     if (!token) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const tokenInfo = await this.Authenticator.getTokenPayload(token);
 
     if (!tokenInfo) {
-      throw new Error("Invalid Token");
+      throw new ErrorHandler("Invalid Token", 401);
     }
 
     const buyer = await this.PaymentDatabase.getBuyerById(tokenInfo.id);
 
     if (!buyer) {
-      throw new Error("User not found");
+      throw new ErrorHandler("User not found", 404);
     }
 
     const payment = await this.PaymentDatabase.getPaymentByPaymentId(
@@ -203,7 +205,7 @@ export class PaymentBusiness {
     );
 
     if (!payment) {
-      throw new Error("Payment didn't exist");
+      throw new ErrorHandler("Payment didn't exist", 404);
     }
 
     await this.PaymentDatabase.deletePaymentDB(buyer.buyerId, paymentId);

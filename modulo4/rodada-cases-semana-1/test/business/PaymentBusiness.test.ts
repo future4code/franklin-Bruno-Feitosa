@@ -6,6 +6,7 @@ import {
   IPaymentStatusInputDTO,
 } from "../../src/models/Payment";
 import { PaymentBusiness } from "../../src/business/PaymentBusiness";
+import { ErrorHandler } from "../../src/errors/ErrorHandler";
 
 describe("PaymentBusiness", () => {
   const input: IPaymentInputDTO = {
@@ -272,9 +273,9 @@ describe("PaymentBusiness", () => {
           },
           token
         )
-        .catch((error: any) => {
+        .catch((error) => {
           expect(PaymentDatabase.mock.calls.length).toBe(1);
-          expect(error.message).toBe("Invalid Card");
+          expect(error.message).toBe("Card not found");
           done();
         });
     });

@@ -156,7 +156,7 @@ describe("CardBusiness", () => {
         });
     });
 
-    test("should return 'Bad request'", (done) => {
+    test("should return 'Invalid Token' (!token)", (done) => {
       const cardBusiness = new CardBusiness(
         new CardDatabase(),
         new HashManager(),
@@ -166,12 +166,12 @@ describe("CardBusiness", () => {
       );
 
       cardBusiness.registerCard(input, "").catch((error) => {
-        expect(error.message).toBe("Bad request");
+        expect(error.message).toBe("Invalid Token");
         done();
       });
     });
 
-    test("Should return 'Invalid Token'", (done) => {
+    test("Should return 'Invalid Token' (!tokenInfo)", (done) => {
       Authenticator = jest.fn().mockImplementation(() => {
         return {
           getTokenPayload: jest.fn().mockResolvedValue(null),
@@ -317,7 +317,7 @@ describe("CardBusiness", () => {
   });
 
   describe("allCards", () => {
-    test("should return 'Bad request'", (done) => {
+    test("should return 'Invalid Token' (!token)", (done) => {
       const cardBusiness = new CardBusiness(
         new CardDatabase(),
         new HashManager(),
@@ -327,12 +327,12 @@ describe("CardBusiness", () => {
       );
 
       cardBusiness.allCards("").catch((error) => {
-        expect(error.message).toBe("Bad request");
+        expect(error.message).toBe("Invalid Token");
         done();
       });
     });
 
-    test("Should return 'Invalid Token'", (done) => {
+    test("Should return 'Invalid Token' (!tokenInfo)", (done) => {
       Authenticator = jest.fn().mockImplementation(() => {
         return {
           getTokenPayload: jest.fn().mockResolvedValue(null),
@@ -379,7 +379,7 @@ describe("CardBusiness", () => {
   });
 
   describe("singleCard", () => {
-    test("should return 'Bad request'", (done) => {
+    test("should return 'Invalid Token' (!token)", (done) => {
       const input: IGetSingleCardInputDTO = {
         token: "",
         cardNumber: "5555666677778884",
@@ -394,7 +394,7 @@ describe("CardBusiness", () => {
       );
 
       cardBusiness.getSingleCard(input).catch((error) => {
-        expect(error.message).toBe("Bad request");
+        expect(error.message).toBe("Invalid Token");
         done();
       });
     });
@@ -419,7 +419,7 @@ describe("CardBusiness", () => {
       });
     });
 
-    test("Should return 'Invalid Token'", (done) => {
+    test("Should return 'Invalid Token' (!tokenInfo)", (done) => {
       Authenticator = jest.fn().mockImplementation(() => {
         return {
           getTokenPayload: jest.fn().mockResolvedValue(null),
@@ -496,7 +496,7 @@ describe("CardBusiness", () => {
   });
 
   describe("deleteCard", () => {
-    test("should return 'Bad request'", (done) => {
+    test("should return 'Invalid Token' (!token)", (done) => {
       const input: IGetSingleCardInputDTO = {
         token: "",
         cardNumber: "5555666677778884",
@@ -511,7 +511,7 @@ describe("CardBusiness", () => {
       );
 
       cardBusiness.deleteCard(input).catch((error) => {
-        expect(error.message).toBe("Bad request");
+        expect(error.message).toBe("Invalid Token");
         done();
       });
     });
@@ -536,7 +536,7 @@ describe("CardBusiness", () => {
       });
     });
 
-    test("Should return 'Invalid Token'", (done) => {
+    test("Should return 'Invalid Token' (!tokenInfo)", (done) => {
       Authenticator = jest.fn().mockImplementation(() => {
         return {
           getTokenPayload: jest.fn().mockResolvedValue(null),

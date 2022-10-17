@@ -19,7 +19,7 @@ const buyerController = new BuyerController(
 
 buyerRoutes.post("/create", buyerController.createBuyer);
 buyerRoutes.post("/login", buyerController.login);
-buyerRoutes.get("/", buyerController.buyerInfo);
+buyerRoutes.get("/info", buyerController.buyerInfo);
 buyerRoutes.get("/:buyerId", buyerController.buyerInfoById);
 buyerRoutes.put("/edit", buyerController.editUser);
 buyerRoutes.put("/edit/password", buyerController.editUserPassword);

@@ -4,6 +4,12 @@ import {
   IBuyersInfoInputDTO,
   ICreateBuyerInputDTO,
   ICreateBuyerInputDTODB,
+  IEditUserBothPropertiesInputDTODB,
+  IEditUserEmailInputDTODB,
+  IEditUserInputDTO,
+  IEditUserNamelInputDTODB,
+  IEditUserPasswordInputDTO,
+  IEditUserPasswordInputDTODB,
   ILoginInputDTO,
 } from "../models/Buyer";
 import { Authenticator, ITokenPayload } from "../services/Authenticator";
@@ -196,6 +202,149 @@ export class BuyerBusiness {
     }
 
     let response = { BuyerInfo: buyerInfo };
+
+    return response;
+  };
+
+  public editUser = async (input: IEditUserInputDTO) => {
+    const token = input.token;
+    const name = input.name;
+    const email = input.email;
+    let checkIfPropertyExists: string = "";
+
+    if (!token) {
+      throw new Error("Invalid Token");
+    }
+
+    if (!name && !email) {
+      throw new Error("Bad Request");
+    }
+
+    if (typeof name !== "string" || (name.length < 3 && name)) {
+      throw new Error("Invalid 'name' Parameter");
+    }
+
+    if (typeof email !== "string" || (email.length < 3 && email)) {
+      throw new Error("Invalid 'email' Parameter");
+    }
+
+    if (
+      email &&
+      !email.match(
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+      )
+    ) {
+      throw new Error("Invalid 'email' Parameter");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Invalid Token");
+    }
+
+    const buyer = await this.BuyerDatabase.getBuyerById(tokenInfo.id);
+
+    if (!buyer) {
+      throw new Error("User not found");
+    }
+
+    if (buyer.buyerName === name || buyer.email === email) {
+      throw new Error("The new field cannot be the same as the previous one");
+    }
+
+    if (name && email) {
+      checkIfPropertyExists = "name and email";
+    } else {
+      if (name) checkIfPropertyExists = "name";
+      if (email) checkIfPropertyExists = "email";
+    }
+
+    switch (checkIfPropertyExists) {
+      case "name":
+        const inputDataName: IEditUserNamelInputDTODB = {
+          buyerId: buyer.buyerId,
+          name,
+        };
+        await this.BuyerDatabase.editBuyerNameDB(inputDataName);
+        break;
+      case "email":
+        const inputDataEmail: IEditUserEmailInputDTODB = {
+          buyerId: buyer.buyerId,
+          email,
+        };
+        await this.BuyerDatabase.editBuyerEmailDB(inputDataEmail);
+        break;
+      case "name and email":
+        const inputDataBothDB: IEditUserBothPropertiesInputDTODB = {
+          name,
+          email,
+        };
+        await this.BuyerDatabase.editBothPropertiesBuyerDB(
+          buyer.buyerId,
+          inputDataBothDB
+        );
+        break;
+    }
+
+    const response = { message: "User edited successfully" };
+
+    return response;
+  };
+
+  public editUserPassword = async (input: IEditUserPasswordInputDTO) => {
+    const token = input.token;
+    const previousPassword = input.previousPassword;
+    const newPassword = input.newPassword;
+
+    if (!token) {
+      throw new Error("Invalid Token");
+    }
+
+    if (!previousPassword || !newPassword) {
+      throw new Error("Bad Request");
+    }
+
+    const tokenInfo = await this.Authenticator.getTokenPayload(token);
+
+    if (!tokenInfo) {
+      throw new Error("Invalid Token");
+    }
+
+    const buyer = await this.BuyerDatabase.getBuyerById(tokenInfo.id);
+
+    if (!buyer) {
+      throw new Error("User not found");
+    }
+
+    const comparedPasswords = await this.HashManager.compare(
+      previousPassword,
+      buyer.password
+    );
+
+    if (!comparedPasswords) {
+      throw new Error("Invalid Password");
+    }
+
+    if (typeof newPassword !== "string" || newPassword.length < 6) {
+      throw new Error("Invalid 'password' Parameter");
+    }
+
+    const hashedPassword = await this.HashManager.hash(newPassword);
+
+    if (hashedPassword === buyer.password) {
+      throw new Error(
+        "The new password cannot be the same as the previous one"
+      );
+    }
+
+    const inputPasswordDB: IEditUserPasswordInputDTODB = {
+      buyerId: buyer.buyerId,
+      password: hashedPassword,
+    };
+
+    await this.BuyerDatabase.editBuyerPasswordDB(inputPasswordDB);
+    const response = { message: "User password edited successfully" };
 
     return response;
   };

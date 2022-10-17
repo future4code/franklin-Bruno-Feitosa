@@ -18,7 +18,7 @@ Content-Type: application/json
 
 {
     "email": "bruno@email.com",
-    "password": "123456"
+    "password": "1234567"
 }
 
 ### Get Buyer
@@ -31,6 +31,26 @@ Authorization: {{login.response.body.accessToken}}
 GET http://localhost:3003/buyer/{{buyerId}}
 Content-Type: application/json
 Authorization: {{login.response.body.accessToken}}
+
+### Edit Buyer
+PUT http://localhost:3003/buyer/edit
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+{
+    "email": "bruno@email.com",
+    "name": "Bruno Britto"
+}
+
+### Edit Password
+PUT http://localhost:3003/buyer/edit/password
+Content-Type: application/json
+Authorization: {{login.response.body.accessToken}}
+
+{
+    "newPassword": "123456",
+    "previousPassword": "1234567"
+}
 
 ### Delete Buyer
 @buyerId = 0f2a2821-8a7c-4793-8d1a-790767b5219d

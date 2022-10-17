@@ -3,6 +3,8 @@ import { BuyerBusiness } from "../business/BuyerBusiness";
 import {
   IBuyersInfoInputDTO,
   ICreateBuyerInputDTO,
+  IEditUserInputDTO,
+  IEditUserPasswordInputDTO,
   ILoginInputDTO,
 } from "../models/Buyer";
 import { ICardInputDTO } from "../models/Card";
@@ -74,6 +76,50 @@ export class BuyerController {
       const response = await this.BuyerBusiness.buyerInfoById(input);
 
       res.status(201).send(response);
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).send({ message: error.message });
+      }
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  };
+
+  public editUser = async (req: Request, res: Response) => {
+    try {
+      const token = req.headers.authorization as string;
+      const name = req.body.name as string | undefined;
+      const email = req.body.email as string | undefined;
+
+      const input: IEditUserInputDTO = {
+        token,
+        name,
+        email,
+      };
+      const response = await this.BuyerBusiness.editUser(input);
+
+      res.status(202).send(response);
+    } catch (error) {
+      if (error instanceof Error) {
+        res.status(400).send({ message: error.message });
+      }
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  };
+
+  public editUserPassword = async (req: Request, res: Response) => {
+    try {
+      const token = req.headers.authorization as string;
+      const previousPassword = req.body.previousPassword as string;
+      const newPassword = req.body.newPassword as string;
+
+      const input: IEditUserPasswordInputDTO = {
+        token,
+        previousPassword,
+        newPassword,
+      };
+      const response = await this.BuyerBusiness.editUserPassword(input);
+
+      res.status(202).send(response);
     } catch (error) {
       if (error instanceof Error) {
         res.status(400).send({ message: error.message });

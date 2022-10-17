@@ -3,6 +3,8 @@ import {
   Buyer,
   IBuyersInfoInputDTO,
   ICreateBuyerInputDTO,
+  IEditUserInputDTO,
+  IEditUserPasswordInputDTO,
 } from "../../src/models/Buyer";
 
 describe("BuyerBusiness", () => {
@@ -52,6 +54,10 @@ describe("BuyerBusiness", () => {
         getAllBuyers: jest
           .fn()
           .mockResolvedValue([{ buyerId: "9876543210", buyerName: "Bruno" }]),
+        editBuyerNameDB: jest.fn().mockResolvedValue({}),
+        editBuyerEmailDB: jest.fn().mockResolvedValue({}),
+        editBothPropertiesBuyerDB: jest.fn().mockResolvedValue({}),
+        editBuyerPasswordDB: jest.fn().mockResolvedValue({}),
         createBuyerDB: jest.fn().mockResolvedValue({}),
         deleteBuyerDB: jest.fn().mockResolvedValue({}),
         getCardsByBuyerId: jest.fn().mockResolvedValue([
@@ -169,7 +175,7 @@ describe("BuyerBusiness", () => {
         );
 
         buyerBusiness
-          .createBuyer({ ...input, email: "bruno.email" })
+          .createBuyer({ ...input, email: "bru.email" })
           .catch((error) => {
             expect(error.message).toBe("Invalid 'email' Parameter");
             done();
@@ -555,6 +561,346 @@ describe("BuyerBusiness", () => {
           expect(response.BuyerInfo).toEqual({
             buyerId: "9876543210",
           });
+          done();
+        });
+      });
+    });
+
+    describe("editUser", () => {
+      const input: IEditUserInputDTO = {
+        token,
+        name: "User",
+        email: "user@email.com",
+      };
+
+      test("Should return 'Invalid Token' (!token)", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUser({ ...input, token: "" }).catch((error) => {
+          expect(error.message).toBe("Invalid Token");
+          done();
+        });
+      });
+
+      test("Should return 'Bad Request'", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness
+          .editUser({ ...input, name: "", email: "" })
+          .catch((error) => {
+            expect(error.message).toBe("Bad Request");
+            done();
+          });
+      });
+
+      test("Should return 'Invalid 'name' Parameter'", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUser({ ...input, name: "Lu" }).catch((error) => {
+          expect(error.message).toBe("Invalid 'name' Parameter");
+          done();
+        });
+      });
+
+      test("Should return 'Invalid 'email' Parameter'", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUser({ ...input, email: "Lu" }).catch((error) => {
+          expect(error.message).toBe("Invalid 'email' Parameter");
+          done();
+        });
+      });
+
+      test("Should return 'Invalid 'email' Parameter'", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness
+          .editUser({ ...input, email: "bru.email" })
+          .catch((error) => {
+            expect(error.message).toBe("Invalid 'email' Parameter");
+            done();
+          });
+      });
+
+      test("Should return 'Invalid Token' (!tokenInfo)", (done) => {
+        Authenticator = jest.fn().mockImplementation(() => {
+          return {
+            getTokenPayload: jest.fn().mockResolvedValue(null),
+          };
+        });
+
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUser(input).catch((error) => {
+          expect(error.message).toBe("Invalid Token");
+          done();
+        });
+      });
+
+      test("Should return 'User not found'", (done) => {
+        BuyerDatabase = jest.fn().mockImplementation(() => {
+          return {
+            getBuyerById: jest.fn().mockResolvedValue(undefined),
+          };
+        });
+
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUser(input).catch((error) => {
+          expect(error.message).toBe("User not found");
+          done();
+        });
+      });
+
+      test("Should return 'The new field cannot be the same as the previous one'", (done) => {
+        BuyerDatabase = jest.fn().mockImplementation(() => {
+          return {
+            getBuyerById: jest.fn().mockResolvedValue({ buyerName: "User" }),
+          };
+        });
+
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUser(input).catch((error) => {
+          expect(error.message).toBe(
+            "The new field cannot be the same as the previous one"
+          );
+          done();
+        });
+      });
+
+      test("Should return success for name edit", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUser({ ...input, email: "" }).then((response) => {
+          expect(response.message).toBe("User edited successfully");
+          done();
+        });
+      });
+
+      test("Should return success for email edit", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUser({ ...input, name: "" }).then((response) => {
+          expect(response.message).toBe("User edited successfully");
+          done();
+        });
+      });
+
+      test("Should return success for name and email edit", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUser(input).then((response) => {
+          expect(response.message).toBe("User edited successfully");
+          done();
+        });
+      });
+    });
+
+    describe("editUserPassword", () => {
+      const input: IEditUserPasswordInputDTO = {
+        token,
+        previousPassword: "myPreviousPassword",
+        newPassword: "myNewPassword",
+      };
+
+      test("Should return 'Invalid Token' (!token)", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness
+          .editUserPassword({ ...input, token: "" })
+          .catch((error) => {
+            expect(error.message).toBe("Invalid Token");
+            done();
+          });
+      });
+
+      test("Should return 'Bad Request'", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness
+          .editUserPassword({ ...input, previousPassword: "", newPassword: "" })
+          .catch((error) => {
+            expect(error.message).toBe("Bad Request");
+            done();
+          });
+      });
+
+      test("Should return 'Invalid Token' (!tokenInfo)", (done) => {
+        Authenticator = jest.fn().mockImplementation(() => {
+          return {
+            getTokenPayload: jest.fn().mockResolvedValue(null),
+          };
+        });
+
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUserPassword(input).catch((error) => {
+          expect(error.message).toBe("Invalid Token");
+          done();
+        });
+      });
+
+      test("Should return 'User not found'", (done) => {
+        BuyerDatabase = jest.fn().mockImplementation(() => {
+          return {
+            getBuyerById: jest.fn().mockResolvedValue(undefined),
+          };
+        });
+
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUserPassword(input).catch((error) => {
+          expect(error.message).toBe("User not found");
+          done();
+        });
+      });
+
+      test("Should return 'Invalid Password'", (done) => {
+        HashManager = jest.fn().mockImplementation(() => {
+          return {
+            compare: jest.fn().mockResolvedValue(false),
+          };
+        });
+
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUserPassword(input).catch((error) => {
+          expect(error.message).toBe("Invalid Password");
+          done();
+        });
+      });
+
+      test("Should return 'Invalid 'password' Parameter'", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness
+          .editUserPassword({ ...input, newPassword: "12345" })
+          .catch((error) => {
+            expect(error.message).toBe("Invalid 'password' Parameter");
+            done();
+          });
+      });
+
+      test("Should return 'The new password cannot be the same as the previous one'", (done) => {
+        BuyerDatabase = jest.fn().mockImplementation(() => {
+          return {
+            getBuyerById: jest
+              .fn()
+              .mockResolvedValue({ password: "MyHashedKey" }),
+          };
+        });
+
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUserPassword(input).catch((error) => {
+          expect(error.message).toBe(
+            "The new password cannot be the same as the previous one"
+          );
+          done();
+        });
+      });
+
+      test("Should return success", (done) => {
+        const buyerBusiness = new BuyerBusiness(
+          new BuyerDatabase(),
+          new HashManager(),
+          new Authenticator(),
+          new IdGenerator()
+        );
+
+        buyerBusiness.editUserPassword(input).then((response) => {
+          expect(response.message).toBe("User password edited successfully");
           done();
         });
       });

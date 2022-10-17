@@ -20,6 +20,41 @@
 ### Run this project
 
 - To run this project you'll need to install the dependences and check the documentation below to use the requests.
+
+- You need to create these DB tables:
+
+```
+CREATE TABLE Wirecard_Buyer (
+buyer_id VARCHAR(255) PRIMARY KEY,
+buyer_name VARCHAR(255) NOT NULL,
+email VARCHAR(255) NOT NULL UNIQUE,
+password VARCHAR(255) NOT NULL UNIQUE,
+cpf VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE Wirecard_Card (
+card_number VARCHAR(255) PRIMARY KEY,
+card_holder_name VARCHAR(255) NOT NULL,
+card_expiration_date VARCHAR(255) NOT NULL,
+card_CVV INTEGER NOT NULL,
+card_issuer VARCHAR(255) NOT NULL,
+buyer_id VARCHAR(255) NOT NULL,
+FOREIGN KEY (buyer_id) REFERENCES Wirecard_Buyer(buyer_id)
+);
+
+CREATE TABLE Wirecard_Payment (
+payment_id VARCHAR(255) PRIMARY KEY,
+buyer_id VARCHAR(255) NOT NULL,
+amount INTEGER NOT NULL,
+type ENUM("BOLETO", "CREDIT_CARD") NOT NULL,
+status ENUM("APROVADO", "PENDENTE") NOT NULL DEFAULT "PENDENTE",
+card_number VARCHAR(255),
+payment_date VARCHAR(255) NOT NULL,
+FOREIGN KEY (card_number) REFERENCES Wirecard_Card(card_number),
+FOREIGN KEY (buyer_id) REFERENCES Wirecard_Buyer(buyer_id)
+);
+```
+
 - https://documenter.getpostman.com/view/20887338/2s83zjqN3C
 
 ### Architecture

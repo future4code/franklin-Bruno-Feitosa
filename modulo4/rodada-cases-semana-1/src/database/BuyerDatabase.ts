@@ -1,4 +1,11 @@
-import { ICreateBuyerInputDTODB, IGetBuyerOutputDTODB } from "../models/Buyer";
+import {
+  ICreateBuyerInputDTODB,
+  IEditUserBothPropertiesInputDTODB,
+  IEditUserEmailInputDTODB,
+  IEditUserNamelInputDTODB,
+  IEditUserPasswordInputDTODB,
+  IGetBuyerOutputDTODB,
+} from "../models/Buyer";
 import { ICardInputDTODB, ICardOutputDTODB } from "../models/Card";
 import { IPaymentStatusOutputDTODB } from "../models/Payment";
 import { BaseDatabase } from "./BaseDatabase";
@@ -149,6 +156,33 @@ export class BuyerDatabase extends BaseDatabase {
       .where(`${BuyerDatabase.TABLE_CARD}.buyer_id`, buyerId);
 
     return result;
+  };
+
+  public editBuyerNameDB = async (input: IEditUserNamelInputDTODB) => {
+    await BaseDatabase.connection(BuyerDatabase.TABLE_BUYER)
+      .update({ buyer_name: input.name })
+      .where("buyer_id", input.buyerId);
+  };
+
+  public editBuyerEmailDB = async (input: IEditUserEmailInputDTODB) => {
+    await BaseDatabase.connection(BuyerDatabase.TABLE_BUYER)
+      .update({ email: input.email })
+      .where("buyer_id", input.buyerId);
+  };
+
+  public editBuyerPasswordDB = async (input: IEditUserPasswordInputDTODB) => {
+    await BaseDatabase.connection(BuyerDatabase.TABLE_BUYER)
+      .update({ password: input.password })
+      .where("buyer_id", input.buyerId);
+  };
+
+  public editBothPropertiesBuyerDB = async (
+    buyerId: string,
+    input: IEditUserBothPropertiesInputDTODB
+  ) => {
+    await BaseDatabase.connection(BuyerDatabase.TABLE_BUYER)
+      .update({ email: input.email, buyer_name: input.name })
+      .where("buyer_id", buyerId);
   };
 
   public deleteBuyerDB = async (buyerId: string): Promise<void> => {

@@ -42,6 +42,33 @@ export interface ILoginInputDTO {
   email: string;
   password: string;
 }
+export interface IEditUserInputDTO {
+  token: string;
+  name: string | undefined;
+  email: string | undefined;
+}
+export interface IEditUserPasswordInputDTO {
+  token: string;
+  previousPassword: string;
+  newPassword: string;
+}
+export interface IEditUserPasswordInputDTODB {
+  buyerId: string;
+  password: string;
+}
+
+export interface IEditUserNamelInputDTODB {
+  buyerId: string;
+  name: string;
+}
+export interface IEditUserEmailInputDTODB {
+  buyerId: string;
+  email: string;
+}
+export interface IEditUserBothPropertiesInputDTODB {
+  name: string;
+  email: string;
+}
 
 export interface IGetBuyerOutputDTODB {
   buyerId: string;

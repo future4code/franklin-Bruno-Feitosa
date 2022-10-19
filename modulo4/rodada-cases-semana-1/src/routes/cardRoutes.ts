@@ -6,6 +6,7 @@ import { Authenticator } from "../services/Authenticator";
 import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
 import { LuhnCheckAlgorithm } from "../services/LuhnCheckAlgorithm";
+import { tokenValidate } from "../services/tokenValidate";
 
 export const cardRoutes = Router();
 
@@ -19,7 +20,7 @@ const cardController = new CardController(
   )
 );
 
-cardRoutes.post("/create", cardController.registerCard);
-cardRoutes.get("/all", cardController.allCards);
-cardRoutes.get("/:cardNumber", cardController.singleCard);
-cardRoutes.delete("/:cardNumber", cardController.deleteCard);
+cardRoutes.post("/create", tokenValidate, cardController.registerCard);
+cardRoutes.get("/all", tokenValidate, cardController.allCards);
+cardRoutes.get("/:cardNumber", tokenValidate, cardController.singleCard);
+cardRoutes.delete("/:cardNumber", tokenValidate, cardController.deleteCard);

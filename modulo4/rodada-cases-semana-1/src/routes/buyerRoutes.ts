@@ -5,6 +5,7 @@ import { BuyerDatabase } from "../database/BuyerDatabase";
 import { Authenticator } from "../services/Authenticator";
 import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
+import { tokenValidate } from "../services/tokenValidate";
 
 export const buyerRoutes = Router();
 
@@ -19,8 +20,12 @@ const buyerController = new BuyerController(
 
 buyerRoutes.post("/create", buyerController.createBuyer);
 buyerRoutes.post("/login", buyerController.login);
-buyerRoutes.get("/info", buyerController.buyerInfo);
-buyerRoutes.get("/:buyerId", buyerController.buyerInfoById);
-buyerRoutes.put("/edit", buyerController.editUser);
-buyerRoutes.put("/edit/password", buyerController.editUserPassword);
-buyerRoutes.delete("/:buyerId", buyerController.deleteBuyer);
+buyerRoutes.get("/info", tokenValidate, buyerController.buyerInfo);
+buyerRoutes.get("/:buyerId", tokenValidate, buyerController.buyerInfoById);
+buyerRoutes.put("/edit", tokenValidate, buyerController.editUser);
+buyerRoutes.put(
+  "/edit/password",
+  tokenValidate,
+  buyerController.editUserPassword
+);
+buyerRoutes.delete("/:buyerId", tokenValidate, buyerController.deleteBuyer);

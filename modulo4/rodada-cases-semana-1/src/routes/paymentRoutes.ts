@@ -4,6 +4,7 @@ import { PaymentController } from "../controller/PaymentController";
 import { PaymentDatabase } from "../database/PaymentDatabase";
 import { Authenticator } from "../services/Authenticator";
 import { IdGenerator } from "../services/IdGenerator";
+import { tokenValidate } from "../services/tokenValidate";
 
 export const paymentRoutes = Router();
 
@@ -15,7 +16,15 @@ const paymentController = new PaymentController(
   )
 );
 
-paymentRoutes.post("/create", paymentController.createPayment);
-paymentRoutes.get("/status", paymentController.allPayments);
-paymentRoutes.get("/status/:paymentId", paymentController.singlePaymentStatus);
-paymentRoutes.delete("/:paymentId", paymentController.deletePayment);
+paymentRoutes.post("/create", tokenValidate, paymentController.createPayment);
+paymentRoutes.get("/status", tokenValidate, paymentController.allPayments);
+paymentRoutes.get(
+  "/status/:paymentId",
+  tokenValidate,
+  paymentController.singlePaymentStatus
+);
+paymentRoutes.delete(
+  "/:paymentId",
+  tokenValidate,
+  paymentController.deletePayment
+);
